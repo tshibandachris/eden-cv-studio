@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Générateur de CV · Eden Devs Corp</title>
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgMTIwIiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCI+CiAgPHJlY3Qgd2lkdGg9IjEyMCIgaGVpZ2h0PSIxMjAiIHJ4PSIyOCIgZmlsbD0iIzFFN0JGRiIvPgogIDxyZWN0IHg9IjMwIiB5PSIyNCIgd2lkdGg9IjE2IiBoZWlnaHQ9IjcyIiByeD0iNCIgZmlsbD0iI2ZmZiIvPgogIDxyZWN0IHg9IjMwIiB5PSIyNCIgd2lkdGg9IjUyIiBoZWlnaHQ9IjE2IiByeD0iNCIgZmlsbD0iI2ZmZiIvPgogIDxyZWN0IHg9IjMwIiB5PSI1MiIgd2lkdGg9IjQwIiBoZWlnaHQ9IjE2IiByeD0iNCIgZmlsbD0iI2ZmZiIvPgogIDxyZWN0IHg9IjMwIiB5PSI4MCIgd2lkdGg9IjUyIiBoZWlnaHQ9IjE2IiByeD0iNCIgZmlsbD0iI2ZmZiIvPgogIDxwb2x5Z29uIHBvaW50cz0iODAsMTYgNTgsNTggNzAsNTggNTYsMTA0IDk2LDUwIDgyLDUwIDk0LDE2IiBmaWxsPSIjMEEwRjFBIiBzdHJva2U9IiMxRTdCRkYiIHN0cm9rZS13aWR0aD0iMyIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;700&family=Manrope:wght@400;500;700&family=Montserrat:wght@600;700&family=Inter:wght@400;500;600&family=Caveat:wght@600&display=swap">
+<style>
+:root{--bg:#f4f5f7;--panel:#fff;--ink:#1c2230;--mute:#667085;--line:#e1e4ea;--acc:#1E7BFF;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171d;--panel:#1d222b;--ink:#eceff4;--mute:#9aa3b2;--line:#2c3340;--acc:#8fb1e6}}
+:root[data-theme="dark"]{--bg:#14171d;--panel:#1d222b;--ink:#eceff4;--mute:#9aa3b2;--line:#2c3340;--acc:#8fb1e6}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,sans-serif}
+.app{display:grid;grid-template-columns:minmax(300px,400px) 1fr;gap:20px;max-width:1240px;margin:0 auto;padding:16px}
+@media(max-width:860px){.app{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+h1{font:700 21px Montserrat,Inter,sans-serif;margin:0 0 4px}
+.sub{color:var(--mute);margin:0 0 14px;font-size:14px}
+.toolsbar{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:12px 0 16px}.toolsbar button{border:1px solid var(--line);border-radius:8px;padding:9px 8px;background:var(--bg);color:var(--ink);font:600 12px Inter,sans-serif;cursor:pointer}.toolsbar button.danger{border-color:#d98b8b;color:#b42318}.privacy{border-left:3px solid var(--acc);padding:8px 10px;background:var(--bg);border-radius:0 8px 8px 0;margin:12px 0;font-size:12px;color:var(--mute)}.status{min-height:18px;font-size:12px;color:var(--mute);margin:5px 0}.required{color:#b42318}.empty-note{padding:28px;color:#667085;text-align:center;font:14px Inter,sans-serif}
+h2{font:700 13px Montserrat,Inter,sans-serif;margin:18px 0 8px}
+.tpls{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.sws{display:flex;gap:10px;flex-wrap:wrap}
+.sw{width:38px;height:38px;border-radius:50%;border:3px solid var(--panel);box-shadow:0 0 0 1px var(--line);cursor:pointer;padding:0}
+.sw[aria-pressed="true"]{box-shadow:0 0 0 3px var(--acc)}
+.tpl{border:2px solid var(--line);background:var(--bg);border-radius:10px;padding:8px 4px;cursor:pointer;color:var(--ink);font:500 12px Inter,sans-serif;display:flex;flex-direction:column;align-items:center;gap:6px}
+.tpl i{display:block;width:34px;height:46px;border-radius:3px;border:1px solid var(--line)}
+.tpl[aria-pressed="true"]{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc)}
+.tpl:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+label{display:block;font-size:12.5px;color:var(--mute);margin:10px 0 3px}
+input[type=text],textarea{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+textarea{min-height:76px;resize:vertical}
+.hint{font-size:12px;color:var(--mute);margin:2px 0 0}
+.btn{font:600 14px Montserrat,Inter,sans-serif;border:0;border-radius:10px;padding:12px 16px;cursor:pointer;background:var(--acc);color:#fff;width:100%;margin-top:16px}
+:root[data-theme="dark"] .btn,:root:not([data-theme="light"]) .btn{color:#10151c}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .btn{color:#fff}}
+.stage{overflow:hidden;border-radius:12px;background:var(--line);padding:0}
+.scaler{transform-origin:top left;width:794px}
+.cv{width:794px;min-height:1123px;background:#fff;color:#222;display:grid;grid-template-columns:260px 1fr;font:13px/1.5 Manrope,sans-serif;--a:#1f3a5f;--t:#fff;--h:#1f3a5f}
+.cv[data-t=emeraude]{--a:#1d6b57;--h:#1d6b57}
+.cv[data-t=bordeaux]{--a:#7a1f33;--h:#7a1f33}
+.cv[data-t=noiror]{--a:#17171a;--t:#f2e9d0;--h:#a8801f}
+.cv[data-t=terracotta]{--a:#b5502f;--h:#b5502f}
+.cv[data-t=sobre]{--a:#eef0f2;--t:#222;--h:#3a4650}
+.cv .side{background:var(--a);color:var(--t);padding:34px 22px}
+.cv .ph{width:130px;height:130px;border-radius:50%;margin:0 auto 22px;background:rgba(255,255,255,.18) center/cover no-repeat;border:3px solid rgba(255,255,255,.55)}
+.cv[data-t=sobre] .ph{border-color:#c8ced4;background-color:#dde1e5}
+.cv .side h3{font:700 12px Manrope,sans-serif;margin:20px 0 6px;padding-bottom:4px;border-bottom:1px solid currentColor;opacity:.95}
+.cv .side p,.cv .side li{margin:2px 0;font-size:12px;overflow-wrap:anywhere}
+.cv .side ul{list-style:none;padding:0;margin:0}
+.cv .main{padding:40px 34px}
+.cv .nm{font:700 31px/1.1 Fraunces,Georgia,serif;color:var(--h);margin:0}
+.cv .ti{font-size:15px;margin:4px 0 18px;color:#555}
+.cv .main h3{font:700 14px Fraunces,Georgia,serif;color:var(--h);margin:20px 0 8px;padding-bottom:4px;border-bottom:2px solid var(--h)}
+.cv .it{margin-bottom:11px}
+.cv .it b{display:block}
+.cv .it span{color:#666;font-size:12px}
+.cv .it p{margin:3px 0 0}
+.cv[data-t^="c-"]{--a:#3a5a88;--h:#3a5a88;font-family:Arial,Helvetica,sans-serif}
+.cv[data-t=c-vert]{--a:#1d6b57;--h:#1d6b57}
+.cv[data-t=c-bord]{--a:#7a1f33;--h:#7a1f33}
+.cv[data-t=c-noiror]{--a:#17171a;--h:#a8801f}
+.cv[data-t=c-terracotta]{--a:#b5502f;--h:#b5502f}
+.cv[data-t^="c-"] .side{padding:0;background:#f5f7fa;color:#222;display:flex;flex-direction:column}
+.cv[data-t^="c-"] .hd{background:var(--a);color:#fff;height:215px;position:relative;text-align:center;padding:30px 18px 0;font:700 20px/1.25 Arial,Helvetica,sans-serif;text-transform:uppercase}
+.cv[data-t^="c-"] .hd::after{content:"";position:absolute;left:-15%;right:-15%;bottom:-1px;height:60px;background:#f5f7fa;border-radius:50% 50% 0 0}
+.cv[data-t^="c-"] .ph2{position:relative;z-index:2;width:150px;height:150px;border-radius:50%;border:6px solid #fff;background:#dde1e5 center/cover no-repeat;margin:-130px auto 0}
+.cv[data-t^="c-"] .side h3{font:400 22px/1.2 Arial,Helvetica,sans-serif;color:var(--h);border-bottom:1px solid #d5d9df;padding:0 0 8px;margin:26px 22px 14px;opacity:1}
+.cv .ct{list-style:none;margin:0 22px;padding:0}
+.cv .ct li{display:flex;gap:12px;align-items:flex-start;margin:0 0 11px;font-size:12.5px}
+.cv .ct svg{flex:none}
+.cv .ft{margin-top:auto;height:70px;background:var(--a);position:relative}
+.cv .ft::before{content:"";position:absolute;left:-15%;right:-15%;top:-1px;height:50px;background:#f5f7fa;border-radius:0 0 50% 50%}
+.cv[data-t^="c-"] .main{padding:34px 24px}
+.cv[data-t^="c-"] .main h3{font:400 22px/1.2 Arial,Helvetica,sans-serif;color:var(--h);border-bottom:1px solid #d5d9df;margin:0 0 14px;padding-bottom:8px}
+.cv[data-t^="c-"] .main section{margin-bottom:22px}
+.cv .en{display:flex;justify-content:space-between;gap:14px;margin-bottom:14px}
+.cv .en b{display:block}
+.cv .en .lo{color:var(--h)}
+.cv .en ul{margin:3px 0 0;padding-left:20px}
+.cv .en .dt{font-weight:700;white-space:nowrap}
+.cv[data-l]{display:block;font-family:Manrope,Arial,sans-serif;color:#222}
+.cv[data-l] h1{margin:0}
+.cv[data-l] .pp{width:104px;height:104px;border-radius:50%;background:#dde1e5 center/cover no-repeat;flex:none}
+.cv[data-l] .hh{display:flex;justify-content:space-between;align-items:center;gap:20px}
+.cv[data-l] .hn h1{font:700 32px/1.1 Fraunces,Georgia,serif}
+.cv[data-l] .ti2{font-size:15px;margin:4px 0 8px}
+.cv[data-l] .cl{font-size:12px;line-height:1.7}
+.cv[data-l] section{margin-bottom:20px}
+.cv[data-l] h3{font:700 14px Fraunces,Georgia,serif;color:var(--h);margin:0 0 8px}
+.cv[data-l] .ls{list-style:none;margin:0;padding:0}
+.cv[data-l] .ls li{margin:3px 0}
+.cv[data-l] .one .ls{display:flex;flex-wrap:wrap;gap:4px 18px}
+.cv[data-l=bandeau] .hh{background:var(--a);color:var(--t);padding:36px 38px}
+.cv[data-l=bandeau] .pp{border:4px solid rgba(255,255,255,.6)}
+.cv[data-l=bandeau] .cols{display:grid;grid-template-columns:1fr 230px;min-height:900px}
+.cv[data-l=bandeau] .mc{padding:30px 30px 30px 38px}
+.cv[data-l=bandeau] .sc{background:#f1f3f6;padding:30px 24px}
+.cv[data-l=classique]{padding:44px 48px}
+.cv[data-l=classique] .hh{border-bottom:3px solid var(--h);padding-bottom:18px;margin-bottom:22px}
+.cv[data-l=classique] .hn h1{color:var(--h)}
+.cv[data-l=classique] .pp{border-radius:8px}
+.cv[data-l=classique] h3{border-bottom:1px solid #d5d9df;padding-bottom:4px}
+.cv[data-l=minimal]{padding:50px 48px}
+.cv[data-l=minimal] .hh{margin-bottom:30px;border-bottom:1px solid #d5d9df;padding-bottom:22px}
+.cv[data-l=minimal] .hn h1{font:500 38px/1.05 Fraunces,Georgia,serif}
+.cv[data-l=minimal] .ti2{color:var(--h);font-weight:700}
+.cv[data-l=minimal] .pp{width:88px;height:88px;border-radius:12px}
+.cv[data-l=minimal] section{display:grid;grid-template-columns:150px 1fr;gap:0 18px}
+.cv[data-l=minimal] section>h3{grid-column:1;grid-row:1;font:700 12px Manrope,sans-serif}
+.cv[data-l=minimal] section>:not(h3){grid-column:2}
+.cv[data-l=chrono] .hh{background:var(--a);color:var(--t);padding:34px 44px;border-bottom-left-radius:60px}
+.cv[data-l=chrono] .pp{border:4px solid rgba(255,255,255,.6)}
+.cv[data-l=chrono] .one{padding:30px 44px}
+.cv[data-l=chrono] .en{flex-direction:column-reverse;justify-content:flex-end;gap:2px;border-left:2px solid var(--h);padding-left:18px;margin:0 0 0 5px;padding-bottom:14px;position:relative}
+.cv[data-l=chrono] .en::before{content:"";position:absolute;left:-7px;top:3px;width:12px;height:12px;border-radius:50%;background:var(--h)}
+.cv[data-l=chrono] .dt{color:var(--h)}
+[hidden]{display:none!important}
+select{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}
+.mdb{border:2px solid var(--line);background:var(--bg);border-radius:10px;padding:9px;cursor:pointer;color:var(--ink);font:600 13px Montserrat,Inter,sans-serif}
+.mdb[aria-pressed="true"]{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc)}
+.cv[data-l=lettre] .hh{background:var(--a);color:var(--t);padding:36px 48px}
+.cv[data-l=lettre] .lt{padding:36px 48px;font-size:13.5px;line-height:1.7}
+.cv[data-l=lettre] .lt p{margin:0 0 14px;text-align:justify}
+.cv[data-l=lettre] .dst{margin-left:auto;width:260px;margin-bottom:26px}
+.cv[data-l=lettre] .lieu{text-align:right;margin-bottom:22px}
+.cv[data-l=lettre] .obj{color:var(--h)}
+.cv[data-l=lettre] .sig{text-align:right;margin-top:26px;font-weight:700}
+.eden{background:#0A0F1A;color:#fff;padding:10px 16px}
+.eden .in{max-width:1240px;margin:0 auto;display:flex;align-items:center;gap:12px}
+.eden svg{width:36px;height:36px;flex:none}
+.eden b{display:block;font:700 15px/1.2 Montserrat,Inter,sans-serif;letter-spacing:.04em}
+.eden span{display:block;font-size:12.5px;color:#9db4d6}
+.eden-f{max-width:1240px;margin:0 auto;padding:4px 16px 24px;font-size:12.5px;color:var(--mute)}
+.eden-f a{color:var(--acc)}
+.btn2{border:1px dashed var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:9px 12px;cursor:pointer;font:600 13px Inter,sans-serif;width:100%}
+.lr{display:grid;grid-template-columns:1fr 1fr 38px;gap:6px;margin-bottom:6px}
+.lr .x{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;cursor:pointer}
+.noai .ai{display:none}
+.ec{border:1px solid var(--line);border-radius:10px;padding:2px 12px 12px;margin-bottom:10px;background:var(--bg)}
+.ec input[type=text],.ec textarea,.ec select{background:var(--panel)}
+.dr{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.cj{float:right;color:var(--ink);font-size:12.5px}
+.cj input{margin-right:4px}
+.ea{display:flex;gap:8px;margin-top:10px}
+.ea .btn2{width:auto;flex:1;border-style:solid}
+.ea .x{border:1px solid var(--line);background:var(--panel);border-radius:8px;cursor:pointer;color:var(--ink);padding:0 12px;font:inherit;font-size:13px}
+.sg button{display:block;text-align:left;width:100%;margin-top:6px;background:var(--panel);border:1px solid var(--acc);border-radius:8px;padding:8px 10px;color:var(--ink);font:inherit;font-size:13px;cursor:pointer}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips .btn2{width:auto}
+.chips .btn2:disabled{opacity:.45;cursor:default}
+.cv .xl,.cv[data-l] .xl{display:block!important;list-style:disc!important;padding-left:18px!important;margin:0}
+#pvb,#pvbar{display:none}
+@media screen and (max-width:860px){
+.stage{display:none}
+#pvb{display:flex;position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));width:58px;height:58px;border-radius:50%;border:0;background:#1E7BFF;box-shadow:0 4px 14px rgba(0,0,0,.35);align-items:center;justify-content:center;cursor:pointer;z-index:40}
+body.pv{overflow:hidden}
+body.pv #pvb{display:none}
+body.pv #pvbar{display:flex;position:fixed;left:0;right:0;top:0;z-index:61;justify-content:space-between;align-items:center;gap:8px;padding:8px 12px;padding-top:calc(8px + env(safe-area-inset-top,0px));background:#0A0F1A}
+#pvbar button{border:0;border-radius:8px;padding:9px 14px;font:600 13px Montserrat,Inter,sans-serif;cursor:pointer;background:#1E7BFF;color:#fff}
+#pvbar #pvx{background:#273044}
+body.pv .stage{display:block;position:fixed;left:0;right:0;bottom:0;top:calc(56px + env(safe-area-inset-top,0px));z-index:60;height:auto!important;overflow:auto;border-radius:0;background:#dfe3e9}
+}
+.acc{border-top:1px solid var(--line);margin-top:2px}
+.acc>summary{list-style:none;cursor:pointer;padding:12px 2px;font:700 14.5px Montserrat,Inter,sans-serif;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.acc>summary::-webkit-details-marker{display:none}
+.acc>summary::after{content:"+";flex:none;border:1px solid var(--line);border-radius:8px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-weight:400;font-size:20px}
+.acc[open]>summary::after{content:"\2212"}
+.acc>.accb{padding-bottom:14px}
+.or{display:grid;grid-template-columns:1fr 38px 38px auto;gap:6px;align-items:center;margin-bottom:6px}
+.or button{height:34px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;cursor:pointer;font-size:15px}
+.or button:disabled{opacity:.35;cursor:default}
+.or label{display:flex;align-items:center;gap:4px;margin:0;color:var(--ink);white-space:nowrap;font-size:12.5px}
+.cv .cvf{margin-top:28px;padding-top:12px;border-top:1px solid #d5d9df;font-size:12px;color:#555}
+.cv .cvf .sg2{font:600 28px/1.1 Caveat,cursive;color:var(--h);text-align:right;margin-top:8px}
+@media print{
+ @page{size:A4;margin:0}
+ body{background:#fff}
+ .app{display:block;padding:0;max-width:none}
+ .panel,.tools,.eden,.eden-f{display:none!important}
+ .stage{background:none;border-radius:0;overflow:visible;height:auto!important}
+ .scaler{transform:none!important}
+ .cv{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body class="noai">
+<header class="eden"><div class="in"><svg viewBox="0 0 120 120" aria-hidden="true"><rect width="120" height="120" rx="28" fill="#1E7BFF"/> <rect x="30" y="24" width="16" height="72" rx="4" fill="#fff"/> <rect x="30" y="24" width="52" height="16" rx="4" fill="#fff"/> <rect x="30" y="52" width="40" height="16" rx="4" fill="#fff"/> <rect x="30" y="80" width="52" height="16" rx="4" fill="#fff"/> <polygon points="80,16 58,58 70,58 56,104 96,50 82,50 94,16" fill="#0A0F1A" stroke="#1E7BFF" stroke-width="3" stroke-linejoin="round"/></svg><div><b>EDEN DEVS CORP</b><span>Générateur de CV et lettre de motivation</span></div></div></header>
+<div class="app">
+ <div class="panel tools">
+  <h1>Générateur de CV</h1>
+  <p class="sub">Choisissez un modèle, remplissez vos infos, l’aperçu se met à jour.</p>
+  <div class="toolsbar"><button type="button" id="exportData">Exporter mes données</button><button type="button" id="importDataBtn">Importer une sauvegarde</button><button type="button" id="resetData" class="danger">Effacer le formulaire</button><button type="button" id="themeToggle">Basculer clair/sombre</button></div>
+  <input type="file" id="importDataFile" accept="application/json,.json" hidden>
+  <p class="status" id="appStatus" role="status" aria-live="polite"></p>
+  <p class="privacy">Confidentialité : vos informations sont conservées dans le stockage local de ce navigateur. Exportez une sauvegarde avant de changer d’appareil ou de navigateur.</p>
+  <div class="modes"><button class="mdb" data-k="cv">CV</button><button class="mdb" data-k="lettre">Lettre</button></div>
+  <h2 id="hm">Modèle</h2>
+  <div class="tpls" id="tpls"></div>
+  <h2>Couleur</h2>
+  <div class="sws" id="cols"></div>
+
+  <h2>Identité</h2>
+  <label for="f_nom">Nom complet</label><input type="text" id="f_nom">
+  <label for="f_titre">Titre professionnel</label><input type="text" id="f_titre">
+  <label for="f_photo">Photo</label><input type="file" id="f_photo" accept="image/*">
+  <label for="f_email">E-mail</label><input type="text" id="f_email">
+  <label for="f_tel">Téléphone</label><input type="text" id="f_tel">
+  <label for="f_ville">Ville, pays</label><input type="text" id="f_ville">
+  <label for="f_adr">Adresse</label><input type="text" id="f_adr">
+  <label for="f_nai">Date de naissance</label><input type="text" id="f_nai">
+  <label for="f_sexe">Sexe</label><select id="f_sexe"><option value="">— Choisir —</option><option>Femme</option><option>Homme</option></select>
+  <label for="f_nat">Nationalité</label><input type="text" id="f_nat" list="dl_nat" autocomplete="off"><datalist id="dl_nat"><option value="Congolais(e) (RDC)"><option value="Congolais(e) (Congo-Brazzaville)"><option value="Angolais(e)"><option value="Burundais(e)"><option value="Camerounais(e)"><option value="Rwandais(e)"><option value="Ougandais(e)"><option value="Tanzanien(ne)"><option value="Zambien(ne)"><option value="Kenyan(e)"><option value="Sud-africain(e)"><option value="Français(e)"><option value="Belge"><option value="Canadien(ne)"><option value="Portugais(e)"></datalist>
+  <label for="f_civ">État civil</label><select id="f_civ"><option value="">— Choisir —</option><option>Célibataire</option><option>Marié(e)</option><option>Divorcé(e)</option><option>Veuf / Veuve</option></select>
+  <p class="hint">Affichés selon le modèle choisi.</p>
+
+  <div id="lt" hidden>
+  <div id="ai" hidden>
+  <h2>Générer avec l’IA</h2>
+  <label for="a_offre">Offre d’emploi (collez le texte)</label><textarea id="a_offre" style="min-height:120px"></textarea>
+  <label for="a_lang">Langue de la lettre</label><select id="a_lang"><option>Français</option><option>Anglais</option><option>Swahili</option><option>Portugais</option><option>Espagnol</option></select>
+  <label for="a_ton">Ton</label><select id="a_ton"><option>Professionnel</option><option>Dynamique</option><option>Chaleureux</option></select>
+  <button class="btn" id="a_go">Générer la lettre à partir du CV</button>
+  <p class="hint" id="a_msg">La lettre s’appuie sur les informations de votre CV. Renseignez aussi l’entreprise et l’objet ci-dessous.</p>
+  </div>
+  <h2>Lettre (modifiable)</h2>
+  <label for="l_dest">Destinataire</label><input type="text" id="l_dest">
+  <label for="l_ent">Entreprise</label><input type="text" id="l_ent">
+  <label for="l_obj">Objet</label><input type="text" id="l_obj">
+  <label for="l_lieu">Lieu et date</label><input type="text" id="l_lieu">
+  <label for="l_corps">Corps de la lettre</label><textarea id="l_corps" style="min-height:250px"></textarea>
+  <p class="hint">Séparez les paragraphes par une ligne vide. Vos coordonnées viennent de la rubrique Identité.</p>
+  </div>
+  <div id="cvOnly">
+  <details class="acc" id="imp" hidden><summary>Importer un ancien CV</summary><div class="accb"><label for="i_file">Importer un fichier (photo, PDF, Word ou texte)</label><input type="file" id="i_file" accept="image/*,.pdf,.docx,.txt">
+  <label for="i_txt">Ou collez le texte de votre ancien CV</label><textarea id="i_txt" style="min-height:120px"></textarea>
+  <button class="btn" id="i_go">Remplir le formulaire avec l’IA</button>
+  <p class="hint" id="i_msg">Le contenu actuel du formulaire sera remplacé. La photo n’est pas importée.</p></div></details>
+  <details class="acc" id="tr" hidden><summary>Traduire le CV</summary><div class="accb"><label for="t_lang">Langue du CV</label><select id="t_lang"><option>Anglais</option><option>Portugais</option><option>Espagnol</option><option>Swahili</option><option>Français</option></select>
+  <button class="btn" id="t_go">Traduire le CV</button>
+  <button class="btn" id="t_back" hidden style="background:var(--bg);color:var(--ink);border:1px solid var(--line)">Revenir à l’original</button>
+  <p class="hint" id="t_msg">Traduit les titres et le contenu, en gardant noms propres, dates et mise en page.</p></div></details>
+  <details class="acc"><summary>Profil</summary><div class="accb"><label for="f_profil">Résumé de votre profil</label><textarea id="f_profil"></textarea></div></details>
+  <details class="acc"><summary>Expérience professionnelle</summary><div class="accb"><div id="exps"></div><button type="button" class="btn2" data-add="exp">+ Ajouter une expérience</button><textarea id="f_exp" hidden></textarea></div></details>
+  <details class="acc"><summary>Stages</summary><div class="accb"><div id="stgs"></div><button type="button" class="btn2" data-add="stg">+ Ajouter un stage</button><textarea id="f_stg" hidden></textarea></div></details>
+  <details class="acc"><summary>Formation</summary><div class="accb"><div id="edus"></div><button type="button" class="btn2" data-add="edu">+ Ajouter une formation</button><textarea id="f_edu" hidden></textarea></div></details>
+  <details class="acc"><summary>Cours</summary><div class="accb"><div id="crss"></div><button type="button" class="btn2" data-add="crs">+ Ajouter un cours</button><textarea id="f_crs" hidden></textarea></div></details>
+  <details class="acc"><summary>Compétences</summary><div class="accb"><label for="f_comp">Vos compétences</label><textarea id="f_comp" style="min-height:56px"></textarea>
+  <p class="hint">Séparées par des virgules</p></div></details>
+  <details class="acc"><summary>Langues</summary><div class="accb"><div id="langs"></div><button type="button" class="btn2" id="addlang">+ Ajouter une langue</button><textarea id="f_lang" hidden></textarea>
+  <p class="hint">Choisissez la langue et le niveau dans les listes.</p></div></details>
+  <details class="acc"><summary>Activités extra-professionnelles</summary><div class="accb"><label for="f_extra">Une par ligne</label><textarea id="f_extra"></textarea>
+  <p class="hint">Format : activité | organisation | précision</p></div></details>
+  <details class="acc"><summary>Autres rubriques</summary><div class="accb"><div id="xs"></div>
+  <div class="chips" id="chips"></div></div></details>
+  <details class="acc"><summary>Signature et bas de page</summary><div class="accb"><label for="f_sig">Signature (votre nom, en écriture manuscrite)</label><input type="text" id="f_sig">
+  <label for="f_foot">Bas de page</label><input type="text" id="f_foot" placeholder="Ex. : Fait à Kinshasa, le 24 octobre 2026"></div></details>
+  <details class="acc"><summary>Ordre et affichage des rubriques</summary><div class="accb"><p class="hint" style="margin-bottom:8px">Montez ou descendez une rubrique, ou masquez-la sur le CV.</p><div id="ordl"></div></div></details>
+  </div>
+  <button class="btn" id="pdf">Télécharger en PDF</button>
+  <p class="hint">Dans la fenêtre d’impression, choisissez « Enregistrer au format PDF ».</p>
+ </div>
+ <div class="stage" id="stage"><div class="scaler" id="scaler"><div class="cv" id="cv"></div></div></div>
+</div>
+<button id="pvb" type="button" aria-label="Aperçu du CV"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4"/><path d="M14 3l5 5v3"/><circle cx="16" cy="16" r="3"/><path d="M18.5 18.5L21 21"/></svg></button>
+<div id="pvbar"><button type="button" id="pvx">✕ Fermer</button><button type="button" id="pvp">Télécharger en PDF</button></div>
+<footer class="eden-f">© Eden Devs Corp · <a href="https://edendevscorp.com">edendevscorp.com</a></footer>
+<script>
+var MOD=[["courbe","Courbe","linear-gradient(#3a5a88,#3a5a88) 0 0/36% 22% no-repeat,linear-gradient(90deg,#e9edf2 36%,#fff 36%)"],["colonne","Colonne","linear-gradient(90deg,#3a5a88 36%,#fff 36%)"],["bandeau","Bandeau","linear-gradient(#3a5a88,#3a5a88) 0 0/100% 28% no-repeat,linear-gradient(90deg,#fff 68%,#e9edf2 68%)"],["classique","Classique","linear-gradient(#3a5a88,#3a5a88) 50% 14%/80% 4% no-repeat,#fff"],["minimal","Minimal","linear-gradient(#3a5a88,#3a5a88) 10% 10%/40% 5% no-repeat,linear-gradient(90deg,#fff 30%,#f1f3f6 30%)"],["chrono","Chronologie","linear-gradient(#3a5a88,#3a5a88) 22% 0/6% 100% no-repeat,#fff"]];
+var NEW={bandeau:1,classique:1,minimal:1,chrono:1};
+var LB={Anglais:["Profile","Experience","Education","Extracurricular activities","Skills","Languages","Contact","Personal information","Subject:"],Portugais:["Perfil","Experiência","Formação","Atividades extraprofissionais","Competências","Idiomas","Contato","Informações pessoais","Assunto:"],Espagnol:["Perfil","Experiencia","Formación","Actividades extraprofesionales","Competencias","Idiomas","Contacto","Información personal","Asunto:"],Swahili:["Wasifu","Uzoefu","Elimu","Shughuli nje ya kazi","Ujuzi","Lugha","Mawasiliano","Taarifa binafsi","Mada:"]};
+var FR=["Profil","Expériences","Formation","Activités extra-professionnelles","Compétences","Langues","Contact","Informations personnelles"];
+function trans(){var m=LB[D.mode==="lettre"?D.llang:D.cvlang];if(!m)return;document.querySelectorAll("#cv h3").forEach(function(h){if(!h.dataset.fr)h.dataset.fr=h.textContent;var i=FR.indexOf(h.textContent);if(i>-1)h.textContent=m[i];else{var j=XP.indexOf(h.textContent),xt=XTR[D.cvlang];var k2=["Stages","Cours"].indexOf(h.textContent),x2=LB2[D.cvlang];if(j>-1&&xt)h.textContent=xt[j];else if(k2>-1&&x2)h.textContent=x2[k2]}});var o=document.querySelector("#cv .obj b");if(o)o.textContent=o.textContent.replace("Objet :",m[8])}
+var COL=[["bleu","Bleu","#3a5a88","marine"],["vert","Vert","#1d6b57","emeraude"],["bord","Bordeaux","#7a1f33","bordeaux"],["noiror","Noir et or","#17171a","noiror"],["terracotta","Terracotta","#b5502f","terracotta"]];
+function setT(){var c=COL.filter(function(x){return x[0]===D.c})[0]||COL[0];D.t=D.l==="courbe"?"c-"+c[0]:c[3]}
+var LG=["Français","Anglais","Swahili","Lingala","Tshiluba","Kikongo","Portugais","Espagnol","Arabe","Allemand","Italien","Chinois","Russe","Néerlandais"];
+var LV=["Langue maternelle","Courant","Avancé","Intermédiaire","Débutant"];
+function mk(list,val,ph){var s=document.createElement("select");if(val){var m=list.filter(function(x){return x.toLowerCase()===val.toLowerCase()})[0];if(m)val=m}var a=[ph].concat(list);if(val&&list.indexOf(val)<0)a.push(val);a.forEach(function(x,i){var o=document.createElement("option");o.value=i===0?"":x;o.textContent=x;s.appendChild(o)});s.value=val||"";return s}
+function rowsStr(){return Array.prototype.map.call(document.querySelectorAll("#langs .lr"),function(r){var s=r.querySelectorAll("select");return s[0].value?s[0].value+(s[1].value?" — "+s[1].value:""):""}).filter(Boolean).join("\n")}
+function addRow(l,v){var r=document.createElement("div");r.className="lr";var a=mk(LG,l,"Langue…"),b=mk(LV,v,"Niveau…"),x=document.createElement("button");x.type="button";x.className="x";x.textContent="✕";x.setAttribute("aria-label","Supprimer cette langue");r.appendChild(a);r.appendChild(b);r.appendChild(x);document.getElementById("langs").appendChild(r);var ch=function(){D.lang=rowsStr();document.getElementById("f_lang").value=D.lang;render()};a.onchange=ch;b.onchange=ch;x.onclick=function(){r.remove();ch()}}
+function langUI(){var box=document.getElementById("langs");if(!box||rowsStr()===String(D.lang||"").trim())return;box.innerHTML="";lines(D.lang).forEach(function(l){var p=l.split(/\s+[—–-]\s+/);addRow(p[0].trim(),(p[1]||"").trim())});D.lang=rowsStr()}
+function fixSel(id,k){var el=document.getElementById(id),v=D[k]||"";if(!el)return;var has=Array.prototype.some.call(el.options,function(o){return o.value===v});if(v&&!has){var o=document.createElement("option");o.value=o.textContent=v;el.appendChild(o)}el.value=v}
+function sync(){fixSel("f_sexe","sexe");fixSel("f_civ","civil");langUI();entUI("exp");entUI("stg");entUI("edu");entUI("crs");var Lt=D.mode==="lettre";document.getElementById("lt").hidden=!Lt;document.getElementById("cvOnly").hidden=Lt;document.getElementById("tpls").hidden=Lt;document.getElementById("hm").hidden=Lt;document.querySelectorAll(".mdb").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.k===(Lt?"lettre":"cv"))});document.querySelectorAll(".tpl").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.m===D.l)});document.querySelectorAll(".sw").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.c===D.c)})}
+var D={mode:"cv",stg:"",crs:"",sig:"",foot:"",ld:"",le:"",lj:"",lo:"",lc:"",l:"courbe",c:"bleu",t:"c-bleu",naissance:"",sexe:"",nation:"",civil:"",adresse:"",extra:"",tpl0:0,nom:"",titre:"",email:"",tel:"",ville:"",photo:"",profil:"",exp:"",edu:"",comp:"",lang:"",xs:[],ord:[],hid:[],cvlang:"Français"};
+try{var s=localStorage.getItem("cvdata");if(s)D=Object.assign(D,JSON.parse(s))}catch(e){}
+// Migration prudente : retire uniquement les valeurs d’exemple préchargées dans les anciennes versions.
+(function(){var demo={nom:"Amina Kabongo",titre:"Développeuse web",email:"amina@exemple.com",tel:"+243 000 000 000",ville:"Kinshasa, RDC",naissance:"28 janvier 2000",sexe:"Femme",nation:"Congolaise",civil:"Célibataire",adresse:"Avenue Exemple n° 12, Kinshasa",profil:"Développeuse web avec 5 ans d’expérience dans la création d’applications de gestion. Rigoureuse, à l’aise en équipe et en autonomie.",exp:"2021–2024 | Développeuse web | Société Exemple | Création d’un portail de gestion pour 300 utilisateurs.\n2018–2021 | Développeuse junior | Agence Modèle | Maintenance et évolution de sites clients.",edu:"2018 | Licence en informatique | Université de Kinshasa\n2015 | Diplôme d’État | Lycée Exemple",comp:"JavaScript, React, Node.js, PostgreSQL, Git",lang:"Français — courant\nAnglais — intermédiaire\nLingala — langue maternelle",extra:"Engagement dans des actions sociales | Association Exemple | Aide aux enfants vulnérables"};Object.keys(demo).forEach(function(k){if(D[k]===demo[k])D[k]=""});if(D.ld==="Madame, Monsieur"&&D.le==="Société Exemple")D.ld=D.le=D.lj=D.lo=D.lc=""})();
+var ids={nom:"f_nom",titre:"f_titre",email:"f_email",tel:"f_tel",ville:"f_ville",profil:"f_profil",exp:"f_exp",edu:"f_edu",comp:"f_comp",lang:"f_lang",naissance:"f_nai",sexe:"f_sexe",nation:"f_nat",civil:"f_civ",adresse:"f_adr",extra:"f_extra",stg:"f_stg",crs:"f_crs",sig:"f_sig",foot:"f_foot",ld:"l_dest",le:"l_ent",lj:"l_obj",lo:"l_lieu",lc:"l_corps"};
+function esc(x){return String(x||"").replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function lines(x){return String(x||"").split("\n").map(function(l){return l.trim()}).filter(Boolean)}
+function render(){
+ var cv=document.getElementById("cv");setT();cv.setAttribute("data-t",D.t);
+ cv.removeAttribute("data-l");
+ if(D.mode==="lettre"){lettre(cv);done();return}
+ if(D.t.indexOf("c-")===0){courbe(cv);done();return}
+ if(NEW[D.l]){autres(cv);done();return}
+ var ex=lines(D.exp).map(function(l){var p=l.split("|").map(function(x){return x.trim()});return '<div class="it"><b>'+esc(p[1]||"")+'</b><span>'+esc(p[0]||"")+(p[2]?" · "+esc(p[2]):"")+'</span>'+(p[3]?'<p>'+esc(p[3])+'</p>':"")+'</div>'}).join("");
+ var ed=lines(D.edu).map(function(l){var p=l.split("|").map(function(x){return x.trim()});return '<div class="it"><b>'+esc(p[1]||"")+'</b><span>'+esc(p[0]||"")+(p[2]?" · "+esc(p[2]):"")+'</span></div>'}).join("");
+ var co=String(D.comp||"").split(",").map(function(x){return x.trim()}).filter(Boolean).map(function(x){return"<li>"+esc(x)+"</li>"}).join("");
+ var la=lines(D.lang).map(function(x){return"<li>"+esc(x)+"</li>"}).join("");
+ cv.innerHTML='<div class="side"><div class="ph"'+(D.photo?' style="background-image:url('+D.photo+')"':"")+'></div>'
+ +'<h3>Contact</h3><p>'+esc(D.email)+'</p><p>'+esc(D.tel)+'</p><p>'+esc(D.ville)+'</p>'
+ +(co?'<h3>Compétences</h3><ul>'+co+'</ul>':"")+(la?'<h3>Langues</h3><ul>'+la+'</ul>':"")+'</div>'
+ +'<div class="main"><h1 class="nm">'+esc(D.nom)+'</h1><div class="ti">'+esc(D.titre)+'</div>'
+ +(D.profil?'<h3>Profil</h3><p>'+esc(D.profil)+'</p>':"")+(ex?'<h3>Expériences</h3>'+ex:"")+cstr("Stages",D.stg)+(ed?'<h3>Formation</h3>'+ed:"")+cstr("Cours",D.crs)+xsec(function(t,h){return h?'<h3>'+t+'</h3>'+h:""})+xfoot()+'</div>';
+ document.querySelectorAll(".tpl").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.t===D.t)});
+ try{localStorage.setItem("cvdata",JSON.stringify(D))}catch(e){}
+ fit();
+}
+var IC={u:"M12 12a4 4 0 100-8 4 4 0 000 8zm0 2c-2.7 0-8 1.3-8 4v2h16v-2c0-2.7-5.3-4-8-4z",m:"M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5z",p:"M6.6 10.8a15 15 0 006.6 6.6l2.2-2.2a1 1 0 011-.25 11 11 0 003.6.6 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.6 3.6a1 1 0 01-.25 1z",h:"M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z",c:"M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V6a2 2 0 00-2-2zm0 16H5V9h14v11z",l:"M12 2a7 7 0 00-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 00-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z",f:"M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z",s:"M12 21l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.18L12 21z"};
+function ic(k){return'<svg viewBox="0 0 24 24" width="18" height="18" fill="var(--h)"><path d="'+IC[k]+'"/></svg>'}
+function done(){document.querySelectorAll(".tpl").forEach(function(b){b.setAttribute("aria-pressed",b.dataset.t===D.t)});try{localStorage.setItem("cvdata",JSON.stringify(D))}catch(e){}fit()}
+function lettre(cv){
+ cv.setAttribute("data-l","lettre");
+ var ct=[D.email,D.tel,D.adresse||D.ville].filter(Boolean).map(esc).join(" · ");
+ var ps=String(D.lc||"").split(/\n\s*\n/).map(function(p){return p.trim()}).filter(Boolean).map(function(p){return'<p>'+esc(p).replace(/\n/g,"<br>")+'</p>'}).join("");
+ cv.innerHTML='<header class="hh"><div class="hn"><h1>'+esc(D.nom)+'</h1><div class="ti2">'+esc(D.titre)+'</div><div class="cl">'+ct+'</div></div></header><div class="lt"><div class="dst"><b>'+esc(D.ld)+'</b><br>'+esc(D.le)+'</div><div class="lieu">'+esc(D.lo)+'</div><p class="obj"><b>Objet : '+esc(D.lj)+'</b></p>'+ps+'<p class="sig">'+esc(D.nom)+'</p></div>';
+}
+function autres(cv){
+ var tr=function(x){return x.trim()},L=D.l;
+ cv.setAttribute("data-l",L);
+ var ct=[D.email,D.tel,D.adresse||D.ville].filter(Boolean).map(esc).join(" · ");
+ var info=[D.naissance,D.nation,D.civil].filter(Boolean).map(esc).join(" · ");
+ var ph='<div class="pp"'+(D.photo?' style="background-image:url('+D.photo+')"':"")+'></div>';
+ var ent=function(x){return lines(x).map(function(l){var p=l.split("|").map(tr);return'<div class="en"><div><b>'+esc(p[1]||"")+'</b>'+(p[2]?'<div class="lo">'+esc(p[2])+'</div>':"")+(p[3]?'<ul><li>'+esc(p[3])+'</li></ul>':"")+'</div><div class="dt">'+esc(p[0]||"")+'</div></div>'}).join("")};
+ var ex=lines(D.extra).map(function(l){var p=l.split("|").map(tr);return'<div class="en"><div><b>'+esc(p[0]||"")+'</b>'+(p[1]?'<div class="lo">'+esc(p[1])+'</div>':"")+(p[2]?'<ul><li>'+esc(p[2])+'</li></ul>':"")+'</div></div>'}).join("");
+ var li=function(a){return a.length?'<ul class="ls">'+a.map(function(s){return'<li>'+esc(s)+'</li>'}).join("")+'</ul>':""};
+ var sk=li(String(D.comp||"").split(",").map(tr).filter(Boolean)),la=li(lines(D.lang));
+ var sec=function(t,h){return h?'<section><h3>'+t+'</h3>'+h+'</section>':""};
+ var main=sec("Profil",D.profil?'<p>'+esc(D.profil)+'</p>':"")+sec("Expériences",ent(D.exp))+sec("Stages",ent(D.stg))+sec("Formation",ent(D.edu))+sec("Cours",ent(D.crs))+sec("Activités extra-professionnelles",ex)+xsec(sec);
+ var side=sec("Compétences",sk)+sec("Langues",la);
+ var head='<header class="hh"><div class="hn"><h1>'+esc(D.nom)+'</h1><div class="ti2">'+esc(D.titre)+'</div><div class="cl">'+ct+(info?'<br>'+info:"")+'</div></div>'+ph+'</header>';
+ cv.innerHTML=L==="bandeau"?head+'<div class="cols"><div class="mc">'+main+'</div><aside class="sc">'+side+'</aside></div>':head+'<div class="one">'+main+side+xfoot()+'</div>';
+}
+function courbe(cv){
+ var tr=function(x){return x.trim()};
+ var rows=[["u",D.nom],["m",D.email],["p",D.tel],["h",D.adresse],["c",D.naissance],["l",D.ville],["u",D.sexe],["f",D.nation],["s",D.civil]].filter(function(r){return r[1]}).map(function(r){return'<li>'+ic(r[0])+'<span>'+esc(r[1])+'</span></li>'}).join("");
+ var dated=function(x){return lines(x).map(function(l){var p=l.split("|").map(tr);return'<div class="en"><div><b>'+esc(p[1]||"")+'</b>'+(p[2]?'<div class="lo">'+esc(p[2])+'</div>':"")+(p[3]?'<ul><li>'+esc(p[3])+'</li></ul>':"")+'</div><div class="dt">'+esc(p[0]||"")+'</div></div>'}).join("")};
+ var ex=lines(D.extra).map(function(l){var p=l.split("|").map(tr);return'<div class="en"><div><b>'+esc(p[0]||"")+'</b>'+(p[1]?'<div class="lo">'+esc(p[1])+'</div>':"")+(p[2]?'<ul><li>'+esc(p[2])+'</li></ul>':"")+'</div></div>'}).join("");
+ var co=String(D.comp||"").split(",").map(tr).filter(Boolean).join(", ");
+ var la=lines(D.lang).join(" · ");
+ var sec=function(t,h){return h?'<section><h3>'+t+'</h3>'+h+'</section>':""};
+ cv.innerHTML='<div class="side"><div class="hd">'+esc(D.nom)+'</div><div class="ph2"'+(D.photo?' style="background-image:url('+D.photo+')"':"")+'></div><h3>Informations personnelles</h3><ul class="ct">'+rows+'</ul><div class="ft"></div></div>'
+ +'<div class="main">'+sec("Profil",D.profil?'<p>'+esc(D.profil)+'</p>':"")+sec("Expériences",dated(D.exp))+sec("Stages",dated(D.stg))+sec("Formation",dated(D.edu))+sec("Cours",dated(D.crs))+sec("Activités extra-professionnelles",ex)+sec("Compétences",co?'<p>'+esc(co)+'</p>':"")+sec("Langues",la?'<p>'+esc(la)+'</p>':"")+xsec(sec)+xfoot()+'</div>';
+}
+function fit(){sync();applyOrder();trans();
+ var st=document.getElementById("stage"),sc=document.getElementById("scaler"),cv=document.getElementById("cv");
+ if(!st.clientWidth)return;var k=Math.min(1,st.clientWidth/794);sc.style.transform="scale("+k+")";
+ st.style.height=(cv.offsetHeight*k)+"px";
+}
+var T=document.getElementById("tpls"),CO=document.getElementById("cols");
+MOD.forEach(function(m){var b=document.createElement("button");b.className="tpl";b.dataset.m=m[0];
+ b.innerHTML='<i style="background:'+m[2]+'"></i>'+m[1];
+ b.onclick=function(){D.l=m[0];render()};T.appendChild(b)});
+COL.forEach(function(c){var b=document.createElement("button");b.className="sw";b.dataset.c=c[0];b.title=c[1];b.setAttribute("aria-label",c[1]);b.style.background=c[2];b.onclick=function(){D.c=c[0];render()};CO.appendChild(b)});
+Object.keys(ids).forEach(function(k){var el=document.getElementById(ids[k]);el.value=D[k]||"";el.addEventListener("input",function(){D[k]=el.value;render()})});
+document.getElementById("f_photo").addEventListener("change",function(e){var f=e.target.files[0];if(!f)return;var status=document.getElementById("appStatus");if(!/^image\/(jpeg|png|webp|gif)$/.test(f.type)){status.textContent="Format photo non pris en charge. Utilisez JPG, PNG, WEBP ou GIF.";e.target.value="";return}if(f.size>5*1024*1024){status.textContent="La photo dépasse 5 Mo. Choisissez une image plus légère.";e.target.value="";return}var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){var max=900,scale=Math.min(1,max/Math.max(im.naturalWidth,im.naturalHeight)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(im.naturalWidth*scale));c.height=Math.max(1,Math.round(im.naturalHeight*scale));c.getContext("2d").drawImage(im,0,0,c.width,c.height);D.photo=c.toDataURL("image/jpeg",.86);status.textContent="Photo ajoutée et optimisée.";render()};im.onerror=function(){status.textContent="Impossible de lire cette image."};im.src=r.result};r.onerror=function(){status.textContent="Impossible de charger la photo."};r.readAsDataURL(f)});
+document.querySelectorAll(".mdb").forEach(function(b){b.onclick=function(){D.mode=b.dataset.k;render()}});
+(function(){
+ var go=document.getElementById("a_go"),msg=document.getElementById("a_msg"),box=document.getElementById("ai"),S=null;
+ if(window.claude&&claude.use)claude.use("sample").then(function(s){S=s;if(s)box.hidden=false}).catch(function(){});
+ go.onclick=function(){
+  if(!S)return;
+  var data={nom:D.nom,titre:D.titre,ville:D.ville,profil:D.profil,experiences:D.exp,formation:D.edu,competences:D.comp,langues:D.lang,activites:D.extra};
+  var offre=document.getElementById("a_offre").value.trim(),lang=document.getElementById("a_lang").value,ton=document.getElementById("a_ton").value.toLowerCase();
+  var p=`Tu rédiges des lettres de motivation. Voici le CV du candidat (données brutes, une entrée par ligne ; expériences au format « période | poste | employeur | description », formation au format « année | diplôme | établissement ») :
+${JSON.stringify(data)}
+
+Entreprise : ${D.le||"non précisée"}
+Poste ou objet visé : ${D.lj||"non précisé"}
+Offre d’emploi :
+${offre||"non fournie"}
+
+Rédige une lettre de motivation en ${lang}, ton ${ton}, adaptée à l’offre et fondée uniquement sur les informations du CV : n’invente aucun diplôme, employeur, chiffre ni compétence. 3 à 4 paragraphes, moins de 300 mots. Réponds uniquement par un objet JSON {"destinataire":"formule d’adresse","objet":"objet de la lettre","corps":"texte complet, de la formule d’appel à la formule de politesse, paragraphes séparés par une ligne vide"}.`;
+  go.disabled=true;msg.textContent="Rédaction en cours…";
+  S.json(p).then(function(r){
+   if(r.corps){D.lc=r.corps;document.getElementById("l_corps").value=D.lc}
+   if(r.objet){D.lj=r.objet;document.getElementById("l_obj").value=D.lj}
+   if(r.destinataire){D.ld=r.destinataire;document.getElementById("l_dest").value=D.ld}
+   msg.textContent="Lettre générée. Relisez-la et modifiez-la si besoin.";D.llang=lang;render();
+  }).catch(function(e){msg.textContent=e&&e.code==="rate_limited"?"Trop de demandes. Réessayez dans un instant.":"La génération n’a pas abouti. Réessayez."}).then(function(){go.disabled=false});
+ };
+})();
+(function(){
+ var go=document.getElementById("t_go"),back=document.getElementById("t_back"),msg=document.getElementById("t_msg"),box=document.getElementById("tr"),S=null;
+ var K=["titre","profil","exp","edu","comp","lang","extra","sexe","nation","civil","naissance"];
+ function put(o){K.forEach(function(k){if(typeof o[k]==="string"){D[k]=o[k];var el=document.getElementById(ids[k]);if(el)el.value=o[k]}})}
+ function btn(){back.hidden=!D.orig}
+ if(window.claude&&claude.use)claude.use("sample").then(function(s){S=s;if(s)box.hidden=false}).catch(function(){});
+ btn();
+ go.onclick=function(){
+  if(!S)return;
+  var L=document.getElementById("t_lang").value;
+  if(L==="Français"){msg.textContent="Pour revenir au français, utilisez « Revenir à l’original ».";return}
+  if(!D.orig){D.orig={};K.forEach(function(k){D.orig[k]=D[k]||""})}
+  var p=`Traduis en ${L} le contenu de ce CV (JSON). Règles : garde exactement la même structure, le même nombre de lignes et les séparateurs « | » ; garde les années, chiffres et noms propres (personnes, employeurs, établissements, villes) tels quels ; traduis les intitulés de poste, diplômes, descriptions, compétences, langues et niveaux, les mois de la date de naissance, et les champs sexe, nationalité et état civil. N’ajoute rien. Réponds uniquement par un objet JSON avec les mêmes clés.\n${JSON.stringify(D.orig)}`;
+  go.disabled=true;msg.textContent="Traduction en cours…";
+  S.json(p).then(function(r){put(r);D.cvlang=L;msg.textContent="CV traduit en "+L.toLowerCase()+". Relisez-le avant de l’envoyer.";btn();render()}).catch(function(e){msg.textContent=e&&e.code==="rate_limited"?"Trop de demandes. Réessayez dans un instant.":"La traduction n’a pas abouti. Réessayez."}).then(function(){go.disabled=false});
+ };
+ back.onclick=function(){if(!D.orig)return;put(D.orig);D.orig=null;D.cvlang="Français";msg.textContent="Contenu d’origine rétabli.";btn();render()};
+})();
+(function(){
+ var go=document.getElementById("i_go"),msg=document.getElementById("i_msg"),box=document.getElementById("imp"),S=null;
+ var K=["nom","titre","email","tel","ville","adresse","naissance","sexe","nation","civil","profil","exp","edu","comp","lang","extra"];
+ if(window.claude&&claude.use)claude.use("sample").then(function(s){S=s;if(s)box.hidden=false}).catch(function(){});
+ go.onclick=function(){
+  var txt=document.getElementById("i_txt").value.trim().slice(0,10000);
+  if(!S||(!txt&&!impImg)){msg.textContent="Choisissez un fichier ou collez le texte de votre CV.";return}
+  var p=`Voici le texte d’un ancien CV. Extrais les informations et renvoie uniquement un objet JSON avec ces clés (chaîne vide si l’information est absente, n’invente rien) : nom, titre (titre professionnel), email, tel, ville (ville, pays), adresse, naissance, sexe, nation (nationalité), civil (état civil), profil (résumé en 2 à 4 phrases, repris du CV s’il existe), exp (une expérience par ligne, format « période | poste | employeur | courte description », de la plus récente à la plus ancienne), edu (une formation par ligne, format « année | diplôme | établissement »), comp (compétences séparées par des virgules), lang (une langue par ligne, format « langue — niveau »), extra (une activité par ligne, format « activité | organisation | précision »). Sépare les lignes par un retour à la ligne dans la chaîne JSON. Garde la langue du CV d’origine.
+
+TEXTE DU CV :
+${txt||"(voir l’image jointe : le CV est sur la photo)"}`;
+  go.disabled=true;msg.textContent="Lecture du CV en cours…";
+  S.json(p,impImg?{images:[impImg]}:{}).then(function(r){
+   impImg=null;K.forEach(function(k){if(typeof r[k]==="string"){D[k]=r[k];var el=document.getElementById(ids[k]);if(el)el.value=r[k]}});
+   D.orig=null;D.cvlang="Français";var tb=document.getElementById("t_back");if(tb)tb.hidden=true;
+   msg.textContent="Formulaire rempli. Vérifiez chaque rubrique avant d’exporter.";render();
+  }).catch(function(e){msg.textContent=e&&e.code==="rate_limited"?"Trop de demandes. Réessayez dans un instant.":"L’import n’a pas abouti. Réessayez."}).then(function(){go.disabled=false});
+ };
+})();
+var impImg=null,SMP=null;
+var MO=["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"],YR=[];
+for(var yy=new Date().getFullYear()+1;yy>=1960;yy--)YR.push(String(yy));
+function so(list,ph){return'<option value="">'+ph+'</option>'+list.map(function(x){return'<option>'+x+'</option>'}).join("")}
+function pd(t){t=t||"";if(/ce jour|pr[ée]sent|aujourd|present|current|now/i.test(t))return{cur:1};var y=(t.match(/(?:19|20)\d\d/)||[""])[0],m="";MO.forEach(function(x){if(t.toLowerCase().indexOf(x.toLowerCase())>-1)m=x});return{m:m,y:y}}
+function parse(l){var p=l.split("|").map(function(x){return x.trim()}),per=p[0]||"",o={t:p[1]||"",e:p[2]||"",v:"",d:p.slice(3).join(" / ")},a=per.split(/\s*[–—-]\s*/),s=pd(a[0]),f=a[1]?pd(a[1]):{};o.m1=s.m||"";o.y1=s.y||"";o.m2=f.m||"";o.y2=f.y||"";o.cur=!!f.cur;var b=[o.m1,o.y1].filter(Boolean).join(" "),e=o.cur?"ce jour":[o.m2,o.y2].filter(Boolean).join(" "),rb=b&&e?b+" – "+e:b||e;if(rb!==per)o.raw=per;return o}
+function cj(c){var on=c.querySelector('[data-f="cur"]').checked;c.querySelector('[data-f="m2"]').disabled=on;c.querySelector('[data-f="y2"]').disabled=on}
+function addCard(kind,o){var c=document.createElement("div");c.className="ec";c.dataset.raw=o.raw||"";var L={exp:["Poste","Employeur"],stg:["Intitulé du stage","Entreprise ou organisme"],edu:["Formation","Établissement"],crs:["Cours ou formation","Organisme"]}[kind];
+ c.innerHTML='<label>'+L[0]+'</label><input type="text" data-f="t" aria-label="'+L[0]+'"><label>'+L[1]+'</label><input type="text" data-f="e" aria-label="'+L[1]+'"><label>Ville</label><input type="text" data-f="v" aria-label="Ville"><label>Date de début</label><div class="dr"><select data-f="m1" aria-label="Mois de début">'+so(MO,"Mois")+'</select><select data-f="y1" aria-label="Année de début">'+so(YR,"Année")+'</select></div><label>Date de fin<span class="cj"><input type="checkbox" data-f="cur"> ce jour</span></label><div class="dr"><select data-f="m2" aria-label="Mois de fin">'+so(MO,"Mois")+'</select><select data-f="y2" aria-label="Année de fin">'+so(YR,"Année")+'</select></div><label>Description</label><textarea data-f="d" placeholder="Commencez à rédiger ici…" aria-label="Description"></textarea><div class="ea"><button type="button" class="btn2 ai" data-a="ai">✦ Suggestions de l’IA</button><button type="button" class="x" data-a="del">Supprimer</button></div><p class="hint em"></p>';
+ var set=function(f,v){var el=c.querySelector('[data-f="'+f+'"]');if(el.type==="checkbox"){el.checked=!!v;return}if(el.tagName==="SELECT"&&v&&!Array.prototype.some.call(el.options,function(x){return x.value===v})){var op=document.createElement("option");op.value=op.textContent=v;el.appendChild(op)}el.value=v||""};
+ ["t","e","v","d","m1","y1","m2","y2","cur"].forEach(function(f){set(f,o[f])});cj(c);document.getElementById(kind+"s").appendChild(c);return c}
+function cardStr(c){var g=function(f){var el=c.querySelector('[data-f="'+f+'"]');return el.type==="checkbox"?el.checked:el.value.trim()},per;
+ if(c.dataset.raw)per=c.dataset.raw;else{var a=[g("m1"),g("y1")].filter(Boolean).join(" "),b=g("cur")?"ce jour":[g("m2"),g("y2")].filter(Boolean).join(" ");per=a&&b?a+" – "+b:a||b}
+ var lieu=[g("e"),g("v")].filter(Boolean).join(", "),cl=function(x){return String(x).replace(/\|/g,"/").replace(/\s*\n+\s*/g," ")};
+ if(!g("t")&&!lieu&&!g("d")&&!per)return"";return[per,g("t"),lieu,g("d")].map(cl).join(" | ").replace(/(\s*\|\s*)+$/,"")}
+function listStr(kind){return Array.prototype.map.call(document.querySelectorAll("#"+kind+"s .ec"),cardStr).filter(Boolean).join("\n")}
+function entUI(kind){var box=document.getElementById(kind+"s");if(!box||listStr(kind)===String(D[kind]||"").trim())return;box.innerHTML="";lines(D[kind]).forEach(function(l){addCard(kind,parse(l))});D[kind]=listStr(kind)}
+if(window.claude&&claude.use)claude.use("sample").then(function(s){SMP=s;if(s)document.body.classList.remove("noai")}).catch(function(){});
+function suggest(kind,c,b){
+ var g=function(f){return c.querySelector('[data-f="'+f+'"]').value.trim()},m=c.querySelector(".em");
+ if(!SMP)return;
+ if(!g("t")){m.textContent=kind==="exp"||kind==="stg"?"Renseignez d’abord le poste.":"Renseignez d’abord la formation.";return}
+ var per=cardStr(c).split("|")[0].trim(),lang=D.cvlang||"Français";
+ var p=`Tu aides à rédiger un CV. Propose 3 descriptions différentes pour ${kind==="exp"?"cette expérience professionnelle":kind==="stg"?"ce stage":kind==="crs"?"ce cours ou cette formation courte":"cette formation"}, en ${lang}.
+Intitulé : ${g("t")}
+${kind==="exp"||kind==="stg"?"Employeur":"Établissement"} : ${g("e")||"non précisé"}
+Ville : ${g("v")||"non précisée"}
+Période : ${per||"non précisée"}
+Titre professionnel visé : ${D.titre||"non précisé"}
+Description actuelle : ${g("d")||"aucune"}
+
+Règles : chaque description fait 1 ou 2 phrases (25 à 40 mots), reste générique et plausible pour cet intitulé, sans chiffre, sans nom de projet ni de client, sans rien inventer de précis. ${kind==="edu"||kind==="crs"?"Mentionne les domaines et compétences typiquement acquis, sans note ni mention.":"Décris les missions typiques et les compétences mobilisées."} Si une description actuelle existe, propose des versions améliorées de celle-ci. N’utilise pas le symbole |. Réponds uniquement par un objet JSON {"suggestions":["...","...","..."]}.`;
+ b.disabled=true;m.textContent="Rédaction en cours…";var old=c.querySelector(".sg");if(old)old.remove();
+ SMP.json(p,{modelTier:"quick"}).then(function(r){var a=(r.suggestions||[]).filter(function(x){return typeof x==="string"&&x.trim()}).slice(0,3),d=document.createElement("div");d.className="sg";a.forEach(function(s){var q=document.createElement("button");q.type="button";q.dataset.a="use";q.textContent=s.replace(/\|/g,"/");d.appendChild(q)});c.querySelector(".ea").after(d);m.textContent=a.length?"Touchez une suggestion pour l’utiliser, puis adaptez-la à votre cas.":"Aucune suggestion. Réessayez."}).catch(function(e){m.textContent=e&&e.code==="rate_limited"?"Trop de demandes. Réessayez dans un instant.":"Les suggestions n’ont pas abouti. Réessayez."}).then(function(){b.disabled=false})}
+["exp","stg","edu","crs"].forEach(function(kind){
+ var box=document.getElementById(kind+"s");
+ function commit(){D[kind]=listStr(kind);document.getElementById(ids[kind]).value=D[kind];render()}
+ function onf(e){var t=e.target;if(!t.dataset||!t.dataset.f)return;var c=t.closest(".ec");if(/^(m1|y1|m2|y2|cur)$/.test(t.dataset.f)){c.dataset.raw="";cj(c)}commit()}
+ box.addEventListener("input",onf);box.addEventListener("change",onf);
+ box.addEventListener("click",function(e){var b=e.target.closest("[data-a]");if(!b)return;var c=b.closest(".ec");if(b.dataset.a==="del"){c.remove();commit()}else if(b.dataset.a==="ai")suggest(kind,c,b);else if(b.dataset.a==="use"){c.querySelector('[data-f="d"]').value=b.textContent;var sg=c.querySelector(".sg");if(sg)sg.remove();c.querySelector(".em").textContent="";commit()}});
+ document.querySelector('[data-add="'+kind+'"]').onclick=function(){addCard(kind,{})};
+});
+(function(){
+ var f=document.getElementById("i_file"),msg=document.getElementById("i_msg"),go=document.getElementById("i_go"),txt=document.getElementById("i_txt");
+ function lib(src){return new Promise(function(ok,ko){var s=document.createElement("script");s.src=src;s.onload=ok;s.onerror=function(){ko(new Error("lib"))};document.head.appendChild(s)})}
+ f.onchange=async function(){
+  var file=f.files[0];if(!file)return;var n=file.name.toLowerCase();msg.textContent="Lecture du fichier…";
+  try{
+   if(file.type.indexOf("image/")===0){
+    var s=window.claude&&claude.use?await claude.use("sample"):null,lim=s&&s.limits?await s.limits():null;
+    if(!lim||!lim.images){msg.textContent="Les photos ne sont pas prises en charge ici. Collez le texte du CV.";return}
+    txt.value="";impImg=file;go.click()
+   }else if(/\.txt$/.test(n)){txt.value=await file.text();go.click()}
+   else if(/\.docx$/.test(n)){await lib("https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js");var r=await mammoth.extractRawText({arrayBuffer:await file.arrayBuffer()});txt.value=r.value;go.click()}
+   else if(/\.pdf$/.test(n)){await lib("https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js");pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js";var pdf=await pdfjsLib.getDocument({data:new Uint8Array(await file.arrayBuffer())}).promise,t="";for(var i=1;i<=Math.min(pdf.numPages,6);i++){var pg=await pdf.getPage(i),tc=await pg.getTextContent();t+=tc.items.map(function(x){return x.str}).join(" ")+"\n"}if(t.trim().length<80){msg.textContent="Ce PDF semble être une image scannée. Envoyez-le plutôt en photo ou en capture d’écran.";return}txt.value=t;go.click()}
+   else msg.textContent="Format non pris en charge. Utilisez une photo, un PDF, un fichier Word (.docx) ou texte."
+  }catch(e){msg.textContent="Impossible de lire ce fichier. Collez le texte du CV à la place."}
+  f.value=""
+ };
+})();
+var XP=["Centres d’intérêt","Certificats","Qualités","Réalisations","Références"],XTR={Anglais:["Interests","Certificates","Qualities","Achievements","References"],Portugais:["Interesses","Certificados","Qualidades","Realizações","Referências"],Espagnol:["Intereses","Certificados","Cualidades","Logros","Referencias"],Swahili:["Maslahi","Vyeti","Sifa","Mafanikio","Marejeo"]};
+function xsec(sec){return(D.xs||[]).map(function(x){var a=lines(x.v);return a.length?sec(esc(x.t||"Rubrique"),'<ul class="xl">'+a.map(function(s){return'<li>'+esc(s)+'</li>'}).join("")+'</ul>'):""}).join("")}
+function xadd(t,v){var c=document.createElement("div");c.className="xc ec";c.innerHTML='<label>Titre de la rubrique</label><input type="text" data-x="t" aria-label="Titre de la rubrique"><label>Contenu (un élément par ligne)</label><textarea data-x="v" aria-label="Contenu"></textarea><div class="ea"><button type="button" class="x" data-a="xdel">Supprimer</button></div>';c.querySelector('[data-x="t"]').value=t||"";c.querySelector('[data-x="v"]').value=v||"";document.getElementById("xs").appendChild(c)}
+function xchips(){var have=Array.prototype.map.call(document.querySelectorAll('#xs [data-x="t"]'),function(i){return i.value.trim()});document.querySelectorAll("#chips [data-t]").forEach(function(b){b.disabled=have.indexOf(b.dataset.t)>-1})}
+function xsave(){D.xs=Array.prototype.map.call(document.querySelectorAll("#xs .xc"),function(c){return{t:c.querySelector('[data-x="t"]').value.trim(),v:c.querySelector('[data-x="v"]').value}}).filter(function(x){return x.t||x.v.trim()});xchips();ordUI();render()}
+(function(){var ch=document.getElementById("chips");XP.forEach(function(t){var b=document.createElement("button");b.type="button";b.className="btn2";b.dataset.t=t;b.textContent="+ "+t;ch.appendChild(b)});var cb=document.createElement("button");cb.type="button";cb.className="btn2";cb.textContent="+ Rubrique personnalisée";ch.appendChild(cb);
+ (D.xs||[]).forEach(function(x){xadd(x.t,x.v)});xchips();
+ ch.addEventListener("click",function(e){var b=e.target.closest("button");if(!b||b.disabled)return;xadd(b.dataset.t||"","");xchips();var c=document.querySelectorAll("#xs .xc"),l=c[c.length-1];l.querySelector(b.dataset.t?'[data-x="v"]':'[data-x="t"]').focus()});
+ var xs=document.getElementById("xs");xs.addEventListener("input",xsave);xs.addEventListener("click",function(e){var b=e.target.closest('[data-a="xdel"]');if(!b)return;b.closest(".xc").remove();xsave()});
+ function pv(v){document.body.classList.toggle("pv",v);if(v){fit();document.getElementById("stage").scrollTop=0}}
+ document.getElementById("pvb").onclick=function(){pv(true)};document.getElementById("pvx").onclick=function(){pv(false)};document.getElementById("pvp").onclick=function(){document.title=(D.mode==="lettre"?"Lettre":"CV")+(D.nom?" - "+D.nom:"")+" · Eden Devs Corp";window.print()};
+})();
+var ORD0=["Profil","Expériences","Stages","Formation","Cours","Activités extra-professionnelles","Compétences","Langues"],LB2={Anglais:["Internships","Courses"],Portugais:["Estágios","Cursos"],Espagnol:["Prácticas","Cursos"],Swahili:["Mafunzo kazini","Kozi"]};
+function avail(){return ORD0.concat((D.xs||[]).map(function(x){return x.t}).filter(Boolean))}
+function curOrd(){var a=avail(),o=(D.ord||[]).filter(function(t,i,arr){return a.indexOf(t)>-1&&arr.indexOf(t)===i});a.forEach(function(t){if(o.indexOf(t)<0)o.push(t)});return o}
+function xfoot(){return D.sig||D.foot?'<div class="cvf">'+(D.foot?'<div>'+esc(D.foot)+'</div>':"")+(D.sig?'<div class="sg2">'+esc(D.sig)+'</div>':"")+'</div>':""}
+function cstr(t,s){var r=lines(s).map(function(l){var p=l.split("|").map(function(x){return x.trim()});return'<div class="it"><b>'+esc(p[1]||"")+'</b><span>'+esc(p[0]||"")+(p[2]?" · "+esc(p[2]):"")+'</span>'+(p[3]?'<p>'+esc(p[3])+'</p>':"")+'</div>'}).join("");return r?'<h3>'+t+'</h3>'+r:""}
+function applyOrder(){
+ if(D.mode==="lettre")return;
+ var ord=curOrd(),hid=D.hid||[];
+ function idx(t){var i=ord.indexOf(t);return i<0?999:i}
+ document.querySelectorAll("#cv .main,#cv .mc,#cv .one,#cv .sc,#cv .side").forEach(function(box){
+  var side=box.classList.contains("side"),head=[],groups=[],tail=[],cur=null;
+  Array.prototype.slice.call(box.children).forEach(function(k){
+   if(k.classList.contains("cvf")){tail.push(k);cur=null;return}
+   var isS=k.tagName==="SECTION",isH=k.tagName==="H3";
+   if(isS||isH){var h=isS?k.querySelector("h3"):k;cur={t:h?(h.dataset.fr||h.textContent):"",n:[k]};groups.push(cur)}
+   else if(cur)cur.n.push(k);else head.push(k)});
+  groups.forEach(function(g,i){g.i=i;g.n.forEach(function(n){n.style.display=hid.indexOf(g.t)>-1?"none":""})});
+  if(!side)groups.sort(function(a,b){return idx(a.t)-idx(b.t)||a.i-b.i});
+  head.concat([].concat.apply([],groups.map(function(g){return g.n})),tail).forEach(function(n){box.appendChild(n)})})}
+function mv(i,dx){var o=curOrd(),j=i+dx;if(j<0||j>=o.length)return;var t=o[i];o[i]=o[j];o[j]=t;D.ord=o;ordUI();render()}
+function ordUI(){var box=document.getElementById("ordl");if(!box)return;var o=curOrd(),hid=D.hid||[];box.innerHTML="";
+ o.forEach(function(t,i){var r=document.createElement("div");r.className="or";var sp=document.createElement("span");sp.textContent=t;
+  var u=document.createElement("button");u.type="button";u.textContent="↑";u.setAttribute("aria-label","Monter");u.disabled=i===0;u.onclick=function(){mv(i,-1)};
+  var d=document.createElement("button");d.type="button";d.textContent="↓";d.setAttribute("aria-label","Descendre");d.disabled=i===o.length-1;d.onclick=function(){mv(i,1)};
+  var l=document.createElement("label"),c=document.createElement("input");c.type="checkbox";c.checked=hid.indexOf(t)<0;
+  c.onchange=function(){var h=(D.hid||[]).filter(function(x){return x!==t});if(!c.checked)h.push(t);D.hid=h;render()};
+  l.appendChild(c);l.appendChild(document.createTextNode(" Afficher"));r.appendChild(sp);r.appendChild(u);r.appendChild(d);r.appendChild(l);box.appendChild(r)})}
+ordUI();
+document.getElementById("addlang").onclick=function(){addRow("","")};
+document.getElementById("pdf").onclick=function(){document.title=(D.mode==="lettre"?"Lettre":"CV")+(D.nom?" - "+D.nom:"")+" · Eden Devs Corp";window.print()};
+window.addEventListener("resize",fit);
+// Sauvegarde/restauration explicite des données du CV.
+(function(){
+ var status=document.getElementById("appStatus"),file=document.getElementById("importDataFile");
+ function announce(t){status.textContent=t}
+ document.getElementById("exportData").onclick=function(){try{var blob=new Blob([JSON.stringify(D,null,2)],{type:"application/json;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="eden-cv-sauvegarde-"+new Date().toISOString().slice(0,10)+".json";document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},1000);announce("Sauvegarde JSON exportée.")}catch(e){announce("L’export a échoué. Réessayez.")}};
+ document.getElementById("importDataBtn").onclick=function(){file.click()};
+ file.onchange=function(){var f=file.files&&file.files[0];if(!f)return;var rd=new FileReader();rd.onload=function(){try{var obj=JSON.parse(rd.result);if(!obj||typeof obj!=="object"||Array.isArray(obj)||typeof obj.nom!=="string")throw new Error("invalid");var allowed=Object.keys(D);Object.keys(obj).forEach(function(k){if(allowed.indexOf(k)>-1)D[k]=obj[k]});Object.keys(ids).forEach(function(k){var el=document.getElementById(ids[k]);if(el)el.value=typeof D[k]==="string"?D[k]:""});document.getElementById("f_photo").value="";document.getElementById("xs").innerHTML="";(D.xs||[]).forEach(function(x){xadd(x.t,x.v)});xchips();ordUI();render();announce("Sauvegarde importée. Vérifiez les rubriques avant l’export PDF.")}catch(e){announce("Fichier invalide : choisissez une sauvegarde JSON exportée par ce générateur.")}file.value=""};rd.onerror=function(){announce("Impossible de lire le fichier.");file.value=""};rd.readAsText(f)};
+ document.getElementById("resetData").onclick=function(){if(!window.confirm("Effacer toutes les informations du formulaire et la sauvegarde locale de ce CV ? Cette action ne peut pas être annulée."))return;try{localStorage.removeItem("cvdata")}catch(e){};D={mode:"cv",stg:"",crs:"",sig:"",foot:"",ld:"",le:"",lj:"",lo:"",lc:"",l:"courbe",c:"bleu",t:"c-bleu",naissance:"",sexe:"",nation:"",civil:"",adresse:"",extra:"",tpl0:0,nom:"",titre:"",email:"",tel:"",ville:"",photo:"",profil:"",exp:"",edu:"",comp:"",lang:"",xs:[],ord:[],hid:[],cvlang:"Français"};Object.keys(ids).forEach(function(k){var el=document.getElementById(ids[k]);if(el)el.value=""});document.getElementById("f_photo").value="";document.getElementById("a_offre").value="";document.getElementById("xs").innerHTML="";document.getElementById("langs").innerHTML="";["exp","stg","edu","crs"].forEach(function(k){document.getElementById(k+"s").innerHTML=""});xchips();ordUI();render();announce("Formulaire effacé.")};
+ document.getElementById("themeToggle").onclick=function(){var root=document.documentElement,now=root.getAttribute("data-theme");root.setAttribute("data-theme",now==="dark"?"light":"dark");announce("Thème "+(root.getAttribute("data-theme")==="dark"?"sombre":"clair")+" activé.")};
+})();
+render();
+</script>
+</body>
+</html>
