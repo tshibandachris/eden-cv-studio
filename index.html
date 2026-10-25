@@ -436,7 +436,7 @@ function cardStr(c){var g=function(f){var el=c.querySelector('[data-f="'+f+'"]')
  var lieu=[g("e"),g("v")].filter(Boolean).join(", "),cl=function(x){return String(x).replace(/\|/g,"/").replace(/\s*\n+\s*/g," ")};
  if(!g("t")&&!lieu&&!g("d")&&!per)return"";return[per,g("t"),lieu,g("d")].map(cl).join(" | ").replace(/(\s*\|\s*)+$/,"")}
 function listStr(kind){return Array.prototype.map.call(document.querySelectorAll("#"+kind+"s .ec"),cardStr).filter(Boolean).join("\n")}
-function entUI(kind){var box=document.getElementById(kind+"s");if(!box||listStr(kind)===String(D[kind]||"").trim())return;box.innerHTML="";lines(D[kind]).forEach(function(l){addCard(kind,parse(l))});D[kind]=listStr(kind)}
+function entUI(kind){var box=document.getElementById(kind+"s");if(!box)return;var active=box.contains(document.activeElement);if(active){D[kind]=listStr(kind);return}if(listStr(kind)===String(D[kind]||"").trim())return;box.innerHTML="";lines(D[kind]).forEach(function(l){addCard(kind,parse(l))});D[kind]=listStr(kind)}
 if(window.claude&&claude.use)claude.use("sample").then(function(s){SMP=s;if(s)document.body.classList.remove("noai")}).catch(function(){});
 function suggest(kind,c,b){
  var g=function(f){return c.querySelector('[data-f="'+f+'"]').value.trim()},m=c.querySelector(".em");
