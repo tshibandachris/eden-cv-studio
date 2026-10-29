@@ -98,6 +98,14 @@ export default async function handler(req, res) {
     });
     const data = await upstream.json().catch(() => ({}));
     if (!upstream.ok) {
+      // Log safe diagnostics only: never log the API key or request URL.
+      console.error("[ai] Gemini upstream failure", {
+        httpStatus: upstream.status,
+        apiStatus: data?.error?.status || null,
+        apiMessage: typeof data?.error?.message === "string"
+          ? data.error.message.slice(0, 300)
+          : null
+      });
       const status = upstream.status === 429 ? 429 : 502;
       return reply(res, status, { error: upstream.status === 429 ? "Limite du moteur IA atteinte. Réessayez plus tard." : "Le moteur IA n’a pas pu traiter la demande." });
     }
@@ -108,6 +116,10 @@ export default async function handler(req, res) {
     if (!html) return reply(res, 502, { error: "Aucun contenu exploitable n’a été retourné." });
     return reply(res, 200, { html });
   } catch (error) {
+    console.error("[ai] Gemini request failed", {
+      name: error && typeof error.name === "string" ? error.name : "UnknownError",
+      message: error && typeof error.message === "string" ? error.message.slice(0, 200) : "No message"
+    });
     return reply(res, 502, { error: "Le service IA est momentanément indisponible." });
   }
 }
