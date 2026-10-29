@@ -137,7 +137,7 @@ export default async function handler(req, res) {
           lastFailure = { status: upstream.status };
           // Try again on transient failures or try the fallback model if this model is unavailable.
           if (retryable || upstream.status === 404) continue;
-          return reply(res, 502, { error: "Le moteur IA n’a pas pu traiter la demande." });
+          break; // Allow the outer loop and the DeepSeek translation fallback to run.
         }
 
         const raw = data.candidates?.[0]?.content?.parts?.map(p => p.text || "").join("") || "";
