@@ -172,7 +172,7 @@ go.onclick=async function(){
  try{for(var i=0;i<parts.length;i++){say(parts.length>1?"Traduction "+(i+1)+"/"+parts.length+"…":"Traduction en cours…");
    var r=await apiAI({mode:"translate",language:L,html:parts[i]});res.push(typeof r.html==="string"?r.html:"")}
   out.dir=L==="Arabe"?"rtl":"ltr";out.innerHTML=sanitize(res.join(""));say("Traduit en "+L.toLowerCase()+". Relisez avant d’utiliser.")
- }catch(e){say(e&&e.status===429?"Limite du moteur IA atteinte. Réessayez plus tard.":e&&e.status===503?"Le service IA n’est pas encore configuré.":"La traduction n’a pas abouti. Réessayez.")}
+ }catch(e){say(e&&e.status===402?"Le compte DeepSeek API n’a plus de crédit. Rechargez le solde ou contactez l’administrateur.":e&&e.status===429?"Les moteurs IA sont temporairement saturés. Réessayez plus tard.":e&&e.status===503?(e.message||"Le service IA est temporairement indisponible."):"La traduction n’a pas abouti. Réessayez.")}
  go.disabled=false};
 
 document.getElementById("cp").onclick=async function(){var h=out.innerHTML,t=out.innerText||out.textContent;if(!t.trim()){msg2.textContent="Rien à copier.";return}
