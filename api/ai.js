@@ -170,7 +170,7 @@ export default async function handler(req, res) {
       };
       const targetCode = targetMap[target];
       if (targetCode) {
-        const baseUrl = (process.env.LIBRETRANSLATE_URL || "").trim().replace(/\\/+$/, "");
+        const baseUrl = (process.env.LIBRETRANSLATE_URL || "").trim().replace(/\/+$/, "");
         if (baseUrl) {
           try {
             const ltBody = { q: body.html, source: "auto", target: targetCode, format: "html" };
