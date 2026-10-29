@@ -106,7 +106,7 @@ export default async function handler(req, res) {
                   required: ["html"]
                 } }
               }),
-              signal: AbortSignal.timeout(12000)
+              signal: AbortSignal.timeout(9000)
             }
           );
           data = await upstream.json().catch(() => ({}));
