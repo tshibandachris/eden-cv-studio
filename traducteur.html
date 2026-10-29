@@ -131,7 +131,7 @@ function itemsToHtml(pages){var lines=[];
  flush();return out}
 async function shrink(f){try{var bm=await createImageBitmap(f),k=Math.min(1,2000/Math.max(bm.width,bm.height)),c=document.createElement("canvas");c.width=Math.round(bm.width*k);c.height=Math.round(bm.height*k);c.getContext("2d").drawImage(bm,0,0,c.width,c.height);return await new Promise(function(ok){c.toBlob(ok,"image/jpeg",.85)})}catch(e){return f}}
 async function apiAI(payload){
- var response=await fetch("/api/ai",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+ var response=await fetch("https://eden-cv-studio-ai.vercel.app/api/ai",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
  var data=await response.json().catch(function(){return{}});
  if(!response.ok){var e=new Error(data.error||"Le service IA est indisponible.");e.status=response.status;throw e}
  return data;
