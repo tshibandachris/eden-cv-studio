@@ -82,7 +82,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const upstream = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=" + encodeURIComponent(apiKey), {
+    const upstream = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=" + encodeURIComponent(apiKey), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -106,8 +106,9 @@ export default async function handler(req, res) {
           ? data.error.message.slice(0, 300)
           : null
       });
-      const status = upstream.status === 429 ? 429 : 502;
-      return reply(res, status, { error: upstream.status === 429 ? "Limite du moteur IA atteinte. Réessayez plus tard." : "Le moteur IA n’a pas pu traiter la demande." });
+      const overloaded = upstream.status === 429 || upstream.status === 503;
+      const status = overloaded ? 429 : 502;
+      return reply(res, status, { error: overloaded ? "Le moteur IA est temporairement saturé. Réessayez dans quelques instants." : "Le moteur IA n’a pas pu traiter la demande." });
     }
     const raw = data.candidates?.[0]?.content?.parts?.map(p => p.text || "").join("") || "";
     let parsed;
@@ -120,6 +121,7 @@ export default async function handler(req, res) {
       name: error && typeof error.name === "string" ? error.name : "UnknownError",
       message: error && typeof error.message === "string" ? error.message.slice(0, 200) : "No message"
     });
-    return reply(res, 502, { error: "Le service IA est momentanément indisponible." });
+    const timedOut = error && error.name === "TimeoutError";
+    return reply(res, timedOut ? 504 : 502, { error: timedOut ? "La demande prend trop de temps. Réessayez dans quelques instants." : "Le service IA est momentanément indisponible." });
   }
 }
