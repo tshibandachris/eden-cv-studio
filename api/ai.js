@@ -173,7 +173,7 @@ export default async function handler(req, res) {
         const baseUrl = (process.env.LIBRETRANSLATE_URL || "").trim().replace(/\\/+$/, "");
         if (baseUrl) {
           try {
-            const ltBody = { q: html, source: "auto", target: targetCode, format: "html" };
+            const ltBody = { q: body.html, source: "auto", target: targetCode, format: "html" };
             if (process.env.LIBRETRANSLATE_API_KEY) ltBody.api_key = process.env.LIBRETRANSLATE_API_KEY;
             const ltResponse = await fetch(baseUrl + "/translate", {
               method: "POST",
