@@ -120,6 +120,7 @@ export default async function handler(req, res) {
           }
           console.error("[ai] DeepSeek primary returned an invalid response");
         } else {
+          if (primaryResponse.status === 402) deepSeekInsufficientBalance = true;
           console.error("[ai] DeepSeek primary failed", {
             httpStatus: primaryResponse.status,
             apiMessage: typeof primaryData?.error?.message === "string"
@@ -139,6 +140,7 @@ export default async function handler(req, res) {
     const models = apiKey ? ["gemini-3.6-flash", "gemini-3.8-flash"] : [];
     let lastFailure = null;
     let sawOverload = false;
+    let deepSeekInsufficientBalance = false;
     for (const model of models) {
       for (let attempt = 1; attempt <= 2; attempt++) {
         let upstream;
@@ -248,6 +250,7 @@ export default async function handler(req, res) {
             httpStatus: fallbackResponse.status
           });
         } else {
+          if (fallbackResponse.status === 402) deepSeekInsufficientBalance = true;
           console.error("[ai] DeepSeek fallback failed", {
             httpStatus: fallbackResponse.status,
             apiMessage: typeof fallbackData?.error?.message === "string"
@@ -267,6 +270,12 @@ export default async function handler(req, res) {
     }
     if (mode === "ocr" && !apiKey) {
       return reply(res, 503, { error: "L’OCR nécessite la configuration de Gemini." });
+    }
+    if (deepSeekInsufficientBalance && sawOverload) {
+      return reply(res, 503, { error: "DeepSeek n’a plus de crédit API et Gemini est temporairement indisponible. Rechargez le solde DeepSeek ou réessayez plus tard." });
+    }
+    if (deepSeekInsufficientBalance) {
+      return reply(res, 402, { error: "Le compte DeepSeek API n’a plus de crédit. Rechargez le solde DeepSeek pour continuer." });
     }
     if (sawOverload) {
       return reply(res, 429, { error: "Les moteurs IA sont temporairement saturés. Réessayez dans quelques instants." });
