@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Traducteur · Eden Devs Corp</title>
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgMTIwIiB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCI+CiAgPHJlY3Qgd2lkdGg9IjEyMCIgaGVpZ2h0PSIxMjAiIHJ4PSIyOCIgZmlsbD0iIzFFN0JGRiIvPgogIDxyZWN0IHg9IjMwIiB5PSIyNCIgd2lkdGg9IjE2IiBoZWlnaHQ9IjcyIiByeD0iNCIgZmlsbD0iI2ZmZiIvPgogIDxyZWN0IHg9IjMwIiB5PSIyNCIgd2lkdGg9IjUyIiBoZWlnaHQ9IjE2IiByeD0iNCIgZmlsbD0iI2ZmZiIvPgogIDxyZWN0IHg9IjMwIiB5PSI1MiIgd2lkdGg9IjQwIiBoZWlnaHQ9IjE2IiByeD0iNCIgZmlsbD0iI2ZmZiIvPgogIDxyZWN0IHg9IjMwIiB5PSI4MCIgd2lkdGg9IjUyIiBoZWlnaHQ9IjE2IiByeD0iNCIgZmlsbD0iI2ZmZiIvPgogIDxwb2x5Z29uIHBvaW50cz0iODAsMTYgNTgsNTggNzAsNTggNTYsMTA0IDk2LDUwIDgyLDUwIDk0LDE2IiBmaWxsPSIjMEEwRjFBIiBzdHJva2U9IiMxRTdCRkYiIHN0cm9rZS13aWR0aD0iMyIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8L3N2Zz4K">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#f4f5f7;--panel:#fff;--ink:#1c2230;--mute:#667085;--line:#e1e4ea;--acc:#1E7BFF;box-sizing:border-box;padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171d;--panel:#1d222b;--ink:#eceff4;--mute:#9aa3b2;--line:#2c3340;--acc:#5aa2ff}}
+:root[data-theme="dark"]{--bg:#14171d;--panel:#1d222b;--ink:#eceff4;--mute:#9aa3b2;--line:#2c3340;--acc:#5aa2ff}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,sans-serif}
+.eden{background:#0A0F1A;color:#fff;padding:10px 16px;padding-top:calc(10px + env(safe-area-inset-top,0px))}
+.eden .in{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.eden svg{width:36px;height:36px;flex:none}
+.eden b{display:block;font:700 15px/1.2 Montserrat,Inter,sans-serif;letter-spacing:.04em}
+.eden span{display:block;font-size:12.5px;color:#9db4d6}
+.eden nav{margin-left:auto;display:flex;gap:6px}
+.eden nav a{color:#cfe0ff;text-decoration:none;font:600 12.5px Montserrat,Inter,sans-serif;padding:7px 10px;border-radius:8px}
+.eden nav a[aria-current]{background:#1E7BFF;color:#fff}
+.wrap{max-width:1100px;margin:0 auto;padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:800px){.wrap{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}
+h1{font:700 20px Montserrat,Inter,sans-serif;margin:0 0 4px}
+h2{font:700 13px Montserrat,Inter,sans-serif;margin:0 0 8px}
+.sub{color:var(--mute);margin:0 0 14px;font-size:14px}
+.tb{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.tb button,.row button{height:36px;min-width:38px;padding:0 12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;cursor:pointer;font:600 13px Inter,sans-serif}
+.tb label.f{display:inline-flex;align-items:center;height:36px;padding:0 12px;border:1px dashed var(--line);border-radius:8px;cursor:pointer;font:600 13px Inter,sans-serif;margin:0;color:var(--ink)}
+.tb input[type=file]{display:none}
+.ed{min-height:200px;max-height:55vh;overflow:auto;border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:10px 12px;outline:none;overflow-wrap:anywhere}
+.ed:focus{border-color:var(--acc)}
+.ed:empty::before{content:attr(data-ph);color:var(--mute)}
+.ed p{margin:0 0 .7em}.ed ul,.ed ol{margin:0 0 .7em;padding-left:22px}
+label{display:block;font-size:12.5px;color:var(--mute);margin:12px 0 3px}
+select{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:9px 10px}
+.btn{font:600 14px Montserrat,Inter,sans-serif;border:0;border-radius:10px;padding:12px 16px;cursor:pointer;background:var(--acc);color:#fff;width:100%;margin-top:14px}
+.btn:disabled{opacity:.6;cursor:default}
+.hint{font-size:12.5px;color:var(--mute);margin:8px 0 0;min-height:1.4em}
+.row{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+button:focus-visible,select:focus-visible,label.f:focus-within{outline:3px solid var(--acc);outline-offset:2px}
+[hidden]{display:none!important}
+@media print{
+ .eden,.panel:first-child,.tb,.row,.hint,h2{display:none!important}
+ .wrap{display:block;padding:0}.panel{border:0;padding:0}
+ .ed{border:0;max-height:none;overflow:visible;background:#fff;color:#000}
+ body{background:#fff}
+}
+</style>
+</head>
+<body>
+<header class="eden"><div class="in"><svg viewBox="0 0 120 120" aria-hidden="true"><rect width="120" height="120" rx="28" fill="#1E7BFF"/> <rect x="30" y="24" width="16" height="72" rx="4" fill="#fff"/> <rect x="30" y="24" width="52" height="16" rx="4" fill="#fff"/> <rect x="30" y="52" width="40" height="16" rx="4" fill="#fff"/> <rect x="30" y="80" width="52" height="16" rx="4" fill="#fff"/> <polygon points="80,16 58,58 70,58 56,104 96,50 82,50 94,16" fill="#0A0F1A" stroke="#1E7BFF" stroke-width="3" stroke-linejoin="round"/></svg><div><b>EDEN DEVS CORP</b><span>Traducteur de texte</span></div>
+<nav><a href="index.html">Générateur de CV</a><a href="#" aria-current="page">Traducteur</a></nav></div></header>
+<main class="wrap">
+ <section class="panel">
+  <h1>Traducteur</h1>
+  <p class="sub">Gras, italique, listes et paragraphes sont conservés. Importez un fichier Word, PDF, texte, HTML ou une photo.</p>
+  <h2>Texte à traduire</h2>
+  <div class="tb" id="tb">
+   <button type="button" data-c="bold" aria-label="Gras"><b>B</b></button>
+   <button type="button" data-c="italic" aria-label="Italique"><i>I</i></button>
+   <button type="button" data-c="underline" aria-label="Souligné"><u>U</u></button>
+   <button type="button" data-c="insertUnorderedList" aria-label="Liste à puces">•</button>
+   <button type="button" data-c="insertOrderedList" aria-label="Liste numérotée">1.</button>
+   <label class="f" for="file">Importer un fichier</label><input type="file" id="file" accept=".docx,.pdf,.txt,.md,.csv,.html,.htm,image/*">
+  </div>
+  <div id="src" class="ed" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Texte à traduire" data-ph="Écrivez ou collez votre texte ici (Word, page web, e-mail…)."></div>
+  <label for="tgt">Traduire vers</label>
+  <select id="tgt"><option>Anglais</option><option>Français</option><option>Swahili</option><option>Lingala</option><option>Tshiluba</option><option>Kikongo</option><option>Portugais</option><option>Espagnol</option><option>Arabe</option><option>Allemand</option><option>Italien</option><option>Chinois</option><option>Russe</option></select>
+  <button class="btn" id="go">Traduire</button>
+  <p class="hint" id="msg" role="status"></p>
+ </section>
+ <section class="panel">
+  <h2>Traduction</h2>
+  <div id="out" class="ed" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Traduction" data-ph="La traduction apparaîtra ici. Vous pouvez la modifier."></div>
+  <div class="row">
+   <button type="button" id="cp">Copier</button>
+   <button type="button" id="sv" hidden>Enregistrer (.html)</button>
+   <button type="button" id="pr">Imprimer / PDF</button>
+   <button type="button" id="re">Utiliser comme texte source</button>
+  </div>
+  <p class="hint" id="msg2" role="status">Langues rares (lingala, tshiluba, kikongo) : faites relire la traduction.</p>
+ </section>
+</main>
+<script>
+var src=document.getElementById("src"),out=document.getElementById("out"),go=document.getElementById("go"),msgEl=document.getElementById("msg"),msg2=document.getElementById("msg2"),tgt=document.getElementById("tgt");
+function say(t){msgEl.textContent=t}
+function esc(x){return String(x).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+var MAP={P:"p",B:"b",STRONG:"b",I:"i",EM:"i",U:"u",UL:"ul",OL:"ol",LI:"li",H1:"h1",H2:"h2",H3:"h3",H4:"h3",H5:"h3",H6:"h3"};
+function clean(n){var o="";n.childNodes.forEach(function(c){
+ if(c.nodeType===3){o+=esc(c.nodeValue.replace(/\s+/g," "));return}
+ if(c.nodeType!==1)return;
+ var t=c.tagName,s=(c.getAttribute("style")||"").toLowerCase();
+ if(/^(SCRIPT|STYLE|META|LINK|HEAD|TITLE|NOSCRIPT)$/.test(t))return;
+ if(t==="BR"){o+="<br>";return}
+ var inner=clean(c);
+ if(t==="A"){var h=c.getAttribute("href")||"";o+=/^(https?:|mailto:)/i.test(h)?'<a href="'+esc(h)+'">'+inner+'</a>':inner;return}
+ if(MAP[t]){o+="<"+MAP[t]+">"+inner+"</"+MAP[t]+">";return}
+ if(/font-weight:\s*(bold|[6-9]00)/.test(s))inner="<b>"+inner+"</b>";
+ if(/font-style:\s*italic/.test(s))inner="<i>"+inner+"</i>";
+ if(/text-decoration[^;]*underline/.test(s))inner="<u>"+inner+"</u>";
+ o+=(t==="DIV"&&!c.querySelector("p,div,ul,ol,li,h1,h2,h3"))?"<p>"+inner+"</p>":inner})
+ return o}
+function sanitize(html){var d=new DOMParser().parseFromString(html,"text/html");return clean(d.body).replace(/<p>(\s|<br>)*<\/p>/g,"")}
+function plainToHtml(t){return t.split(/\n{2,}/).map(function(p){return p.trim()}).filter(Boolean).map(function(p){return"<p>"+esc(p).replace(/\n/g,"<br>")+"</p>"}).join("")}
+[src,out].forEach(function(el){el.addEventListener("paste",function(e){var h=e.clipboardData.getData("text/html"),t=e.clipboardData.getData("text/plain");e.preventDefault();document.execCommand("insertHTML",false,h?sanitize(h):plainToHtml(t))})});
+document.getElementById("tb").addEventListener("mousedown",function(e){if(e.target.closest("button"))e.preventDefault()});
+document.getElementById("tb").addEventListener("click",function(e){var b=e.target.closest("button[data-c]");if(!b)return;src.focus();document.execCommand(b.dataset.c)});
+function lib(u){return new Promise(function(ok,ko){var s=document.createElement("script");s.src=u;s.onload=ok;s.onerror=function(){ko(new Error("lib"))};document.head.appendChild(s)})}
+var PDFJS="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/";
+var P_OCR='Lis le texte de cette image (ou de ces images, dans l’ordre) et restitue-le en HTML en conservant la structure : paragraphes (p), titres (h1 à h3), listes (ul, ol, li), gras (b), italique (i), souligné (u). N’invente rien, ne traduis pas, ne corrige pas. Si une partie est illisible, écris [illisible]. Réponds uniquement par un objet JSON {"html":"..."}.';
+function itemsToHtml(pages){var lines=[];
+ pages.forEach(function(its){var rows=[];
+  its.forEach(function(i){var r=rows[rows.length-1];if(r&&Math.abs(r.y-i.y)<=Math.max(2,r.h*0.4)){r.t+=(r.t&&!/\s$/.test(r.t)&&!/^\s/.test(i.s)?" ":"")+i.s;r.h=Math.max(r.h,i.h)}else rows.push({y:i.y,t:i.s,h:i.h})});
+  rows.forEach(function(r){r.t=r.t.replace(/\s+/g," ").trim();if(r.t)lines.push(r)});lines.push({brk:1})});
+ var hs=lines.filter(function(l){return l.h}).map(function(l){return l.h}).sort(function(a,b){return a-b}),med=hs.length?hs[Math.floor(hs.length/2)]:10;
+ var out="",para="",prev=null,list="";
+ function flush(){if(para){out+="<p>"+esc(para)+"</p>";para=""}if(list){out+="<ul>"+list+"</ul>";list=""}}
+ lines.forEach(function(l){
+  if(l.brk){flush();prev=null;return}
+  var gap=prev?prev.y-l.y:0,isH=l.h>med*1.25&&l.t.length<120,bl=/^[•●▪◦\-–]\s*(.+)/.exec(l.t);
+  if(prev&&gap>prev.h*1.6)flush();
+  if(isH){flush();out+="<h2>"+esc(l.t)+"</h2>"}
+  else if(bl){if(para){out+="<p>"+esc(para)+"</p>";para=""}list+="<li>"+esc(bl[1])+"</li>"}
+  else{if(list){out+="<ul>"+list+"</ul>";list=""}
+   if(para&&/\w-$/.test(para)&&/^[a-zà-ÿ]/.test(l.t))para=para.slice(0,-1)+l.t;else para+=(para?" ":"")+l.t}
+  prev=l});
+ flush();return out}
+async function shrink(f){try{var bm=await createImageBitmap(f),k=Math.min(1,2000/Math.max(bm.width,bm.height)),c=document.createElement("canvas");c.width=Math.round(bm.width*k);c.height=Math.round(bm.height*k);c.getContext("2d").drawImage(bm,0,0,c.width,c.height);return await new Promise(function(ok){c.toBlob(ok,"image/jpeg",.85)})}catch(e){return f}}
+async function ocr(blobs){var S=await getS(),lim=S&&S.limits?await S.limits().catch(function(){return null}):null;
+ if(!S||!lim||!lim.images)throw{code:"noimg"};var max=lim.images.maxCount||1,res=[];
+ for(var i=0;i<blobs.length;i+=max){say("Lecture du texte… "+Math.min(i+max,blobs.length)+"/"+blobs.length);var r=await S.json(P_OCR,{images:blobs.slice(i,i+max)});res.push(typeof r.html==="string"?r.html:"")}
+ return res.join("")}
+async function readPdf(f){await lib(PDFJS+"pdf.min.js");pdfjsLib.GlobalWorkerOptions.workerSrc=PDFJS+"pdf.worker.min.js";
+ var pdf=await pdfjsLib.getDocument({data:new Uint8Array(await f.arrayBuffer())}).promise,n=Math.min(pdf.numPages,30),pages=[],chars=0;
+ for(var i=1;i<=n;i++){var pg=await pdf.getPage(i),tc=await pg.getTextContent(),its=tc.items.filter(function(x){return typeof x.str==="string"}).map(function(x){return{s:x.str,y:x.transform[5],h:Math.abs(x.transform[3])||x.height||10}});its.forEach(function(x){chars+=x.s.length});pages.push(its)}
+ if(chars>=40*n)return{html:itemsToHtml(pages),note:pdf.numPages>n?"Seules les 30 premières pages sont lues.":""};
+ var m=Math.min(pdf.numPages,10),blobs=[];
+ for(var j=1;j<=m;j++){say("Préparation de la page "+j+"/"+m+"…");var pg2=await pdf.getPage(j),vp=pg2.getViewport({scale:1.6}),c=document.createElement("canvas");c.width=vp.width;c.height=vp.height;await pg2.render({canvasContext:c.getContext("2d"),viewport:vp}).promise;blobs.push(await new Promise(function(ok){c.toBlob(ok,"image/jpeg",.85)}))}
+ return{html:await ocr(blobs),note:"PDF scanné lu par l’IA"+(pdf.numPages>m?" (10 premières pages)":"")+"."}}
+document.getElementById("file").addEventListener("change",async function(e){var f=e.target.files[0];if(!f)return;var n=f.name.toLowerCase(),html="",note="";say("Lecture du fichier…");
+ try{
+  if(/\.(txt|md|csv)$/.test(n))html=plainToHtml(await f.text());
+  else if(/\.html?$/.test(n))html=sanitize(await f.text());
+  else if(/\.docx$/.test(n)){await lib("https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js");html=sanitize((await mammoth.convertToHtml({arrayBuffer:await f.arrayBuffer()})).value);note="Mise en forme du fichier Word conservée."}
+  else if(/\.pdf$/.test(n)||f.type==="application/pdf"){var r=await readPdf(f);html=sanitize(r.html);note=r.note||"Texte du PDF lu : vérifiez les paragraphes."}
+  else if(f.type.indexOf("image/")===0){html=sanitize(await ocr([await shrink(f)]));note="Texte lu sur l’image : vérifiez-le avant de traduire."}
+  else if(/\.doc$/.test(n)){say("Les anciens fichiers .doc ne sont pas lisibles. Enregistrez-le en .docx ou en PDF.");e.target.value="";return}
+  else{say("Format non pris en charge. Utilisez Word (.docx), PDF, image, texte ou HTML.");e.target.value="";return}
+  if(!html.replace(/<[^>]*>/g,"").trim()){say("Aucun texte trouvé dans ce fichier.");e.target.value="";return}
+  src.innerHTML=html;say("Fichier chargé. "+note+" Choisissez la langue puis touchez Traduire.")
+ }catch(x){say(x&&x.code==="noimg"?"La lecture d’images n’est pas disponible dans cette vue. Collez le texte à la place.":x&&x.code==="rate_limited"?"Trop de demandes. Réessayez dans un instant.":"Impossible de lire ce fichier. Collez son contenu à la place.")}
+ e.target.value=""});
+function chunks(html){var d=document.createElement("div");d.innerHTML=html;var a=[],cur="";d.childNodes.forEach(function(n){var h=n.nodeType===1?n.outerHTML:esc(n.nodeValue||"");if(cur&&cur.length+h.length>4500){a.push(cur);cur=""}cur+=h});if(cur.trim())a.push(cur);return a}
+async function getS(){if(window.claude&&claude.use){try{return await claude.use("sample")}catch(e){}}return null}
+go.onclick=async function(){
+ var S=await getS();if(!S){say("La traduction par IA n’est pas disponible dans cette vue.");return}
+ if(!src.textContent.trim()){say("Saisissez ou collez un texte.");return}
+ var parts=chunks(sanitize(src.innerHTML)),L=tgt.value,res=[];go.disabled=true;
+ try{for(var i=0;i<parts.length;i++){say(parts.length>1?"Traduction "+(i+1)+"/"+parts.length+"…":"Traduction en cours…");
+   var p=`Traduis en ${L} le texte HTML ci-dessous.\nRègles : conserve exactement la même structure et les mêmes balises (p, br, b, i, u, ul, ol, li, h1, h2, h3, a) avec la même imbrication ; ne traduis que le texte visible ; garde tels quels les noms propres, chiffres, adresses e-mail, URL et valeurs href ; n’ajoute ni balise, ni commentaire, ni explication.\nRéponds uniquement par un objet JSON {"html":"..."} dont la valeur est le HTML traduit.\n\nHTML :\n${parts[i]}`;
+   var r=await S.json(p);res.push(typeof r.html==="string"?r.html:"")}
+  out.dir=L==="Arabe"?"rtl":"ltr";out.innerHTML=sanitize(res.join(""));say("Traduit en "+L.toLowerCase()+". Relisez avant d’utiliser.")
+ }catch(e){say(e&&e.code==="rate_limited"?"Trop de demandes. Réessayez dans un instant.":"La traduction n’a pas abouti. Réessayez.")}
+ go.disabled=false};
+document.getElementById("cp").onclick=async function(){var h=out.innerHTML,t=out.innerText||out.textContent;if(!t.trim()){msg2.textContent="Rien à copier.";return}
+ try{await navigator.clipboard.write([new ClipboardItem({"text/html":new Blob([h],{type:"text/html"}),"text/plain":new Blob([t],{type:"text/plain"})})])}
+ catch(e){var r=document.createRange();r.selectNodeContents(out);var s=getSelection();s.removeAllRanges();s.addRange(r);document.execCommand("copy");s.removeAllRanges()}
+ msg2.textContent="Copié, mise en forme comprise."};
+document.getElementById("pr").onclick=function(){window.print()};
+document.getElementById("re").onclick=function(){if(!out.textContent.trim())return;src.innerHTML=out.innerHTML;out.innerHTML="";say("Traduction reprise comme texte source. Choisissez la nouvelle langue.")};
+(async function(){var sv=document.getElementById("sv"),dl=null;try{if(window.claude&&claude.use)dl=await claude.use("downloads")}catch(e){}
+ sv.hidden=false;sv.onclick=function(){if(!out.textContent.trim()){msg2.textContent="Rien à enregistrer.";return}
+ var data='<!DOCTYPE html><html><head><meta charset="utf-8"><title>Traduction</title></head><body>'+out.innerHTML+'</body></html>';
+ if(dl){dl.save({filename:"traduction.html",data:data}).then(function(){msg2.textContent="Fichier enregistré. Word peut l’ouvrir."}).catch(function(e){if(!e||e.code!=="declined")msg2.textContent="Téléchargement impossible."})}
+ else{var a=document.createElement("a"),u=URL.createObjectURL(new Blob([data],{type:"text/html;charset=utf-8"}));a.href=u;a.download="traduction.html";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(u);msg2.textContent="Fichier téléchargé."}};
+ if(!(await getS()))say("La traduction par IA n’est pas disponible dans cette vue.")})();
+</script>
+</body>
+</html>
