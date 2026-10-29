@@ -138,9 +138,12 @@ async function apiAI(payload){
 }
 function blobData(blob){return new Promise(function(resolve,reject){var r=new FileReader();r.onload=function(){resolve(String(r.result).split(",")[1]||"")};r.onerror=reject;r.readAsDataURL(blob)})}
 async function ocr(blobs){
- var images=[];
- for(var i=0;i<blobs.length;i++){say("Lecture du texte… "+(i+1)+"/"+blobs.length);images.push({mimeType:blobs[i].type==="image/png"?"image/png":blobs[i].type==="image/webp"?"image/webp":"image/jpeg",data:await blobData(blobs[i])})}
- var r=await apiAI({mode:"ocr",images:images});return r.html
+ var res=[];
+ for(var start=0;start<blobs.length;start+=5){var images=[],end=Math.min(start+5,blobs.length);
+  for(var i=start;i<end;i++){say("Lecture du texte… "+(i+1)+"/"+blobs.length);images.push({mimeType:blobs[i].type==="image/png"?"image/png":blobs[i].type==="image/webp"?"image/webp":"image/jpeg",data:await blobData(blobs[i])})}
+  var r=await apiAI({mode:"ocr",images:images});res.push(r.html||"")
+ }
+ return res.join("")
 }
 async function readPdf(f){await lib(PDFJS+"pdf.min.js");pdfjsLib.GlobalWorkerOptions.workerSrc=PDFJS+"pdf.worker.min.js";
  var pdf=await pdfjsLib.getDocument({data:new Uint8Array(await f.arrayBuffer())}).promise,n=Math.min(pdf.numPages,30),pages=[],chars=0;
