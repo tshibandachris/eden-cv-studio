@@ -130,10 +130,21 @@ function itemsToHtml(pages){var lines=[];
   prev=l});
  flush();return out}
 async function shrink(f){try{var bm=await createImageBitmap(f),k=Math.min(1,2000/Math.max(bm.width,bm.height)),c=document.createElement("canvas");c.width=Math.round(bm.width*k);c.height=Math.round(bm.height*k);c.getContext("2d").drawImage(bm,0,0,c.width,c.height);return await new Promise(function(ok){c.toBlob(ok,"image/jpeg",.85)})}catch(e){return f}}
-async function ocr(blobs){var S=await getS(),lim=S&&S.limits?await S.limits().catch(function(){return null}):null;
- if(!S||!lim||!lim.images)throw{code:"noimg"};var max=lim.images.maxCount||1,res=[];
- for(var i=0;i<blobs.length;i+=max){say("Lecture du texte… "+Math.min(i+max,blobs.length)+"/"+blobs.length);var r=await S.json(P_OCR,{images:blobs.slice(i,i+max)});res.push(typeof r.html==="string"?r.html:"")}
- return res.join("")}
+async function apiAI(payload){
+ var response=await fetch("/api/ai",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+ var data=await response.json().catch(function(){return{}});
+ if(!response.ok){var e=new Error(data.error||"Le service IA est indisponible.");e.status=response.status;throw e}
+ return data;
+}
+function blobData(blob){return new Promise(function(resolve,reject){var r=new FileReader();r.onload=function(){resolve(String(r.result).split(",")[1]||"")};r.onerror=reject;r.readAsDataURL(blob)})}
+async function ocr(blobs){
+ var res=[];
+ for(var start=0;start<blobs.length;start+=5){var images=[],end=Math.min(start+5,blobs.length);
+  for(var i=start;i<end;i++){say("Lecture du texte… "+(i+1)+"/"+blobs.length);images.push({mimeType:blobs[i].type==="image/png"?"image/png":blobs[i].type==="image/webp"?"image/webp":"image/jpeg",data:await blobData(blobs[i])})}
+  var r=await apiAI({mode:"ocr",images:images});res.push(r.html||"")
+ }
+ return res.join("")
+}
 async function readPdf(f){await lib(PDFJS+"pdf.min.js");pdfjsLib.GlobalWorkerOptions.workerSrc=PDFJS+"pdf.worker.min.js";
  var pdf=await pdfjsLib.getDocument({data:new Uint8Array(await f.arrayBuffer())}).promise,n=Math.min(pdf.numPages,30),pages=[],chars=0;
  for(var i=1;i<=n;i++){var pg=await pdf.getPage(i),tc=await pg.getTextContent(),its=tc.items.filter(function(x){return typeof x.str==="string"}).map(function(x){return{s:x.str,y:x.transform[5],h:Math.abs(x.transform[3])||x.height||10}});its.forEach(function(x){chars+=x.s.length});pages.push(its)}
@@ -155,29 +166,23 @@ document.getElementById("file").addEventListener("change",async function(e){var 
  }catch(x){say(x&&x.code==="noimg"?"La lecture d’images n’est pas disponible dans cette vue. Collez le texte à la place.":x&&x.code==="rate_limited"?"Trop de demandes. Réessayez dans un instant.":"Impossible de lire ce fichier. Collez son contenu à la place.")}
  e.target.value=""});
 function chunks(html){var d=document.createElement("div");d.innerHTML=html;var a=[],cur="";d.childNodes.forEach(function(n){var h=n.nodeType===1?n.outerHTML:esc(n.nodeValue||"");if(cur&&cur.length+h.length>4500){a.push(cur);cur=""}cur+=h});if(cur.trim())a.push(cur);return a}
-async function getS(){if(window.claude&&claude.use){try{return await claude.use("sample")}catch(e){}}return null}
 go.onclick=async function(){
- var S=await getS();if(!S){say("La traduction par IA n’est pas disponible dans cette vue.");return}
  if(!src.textContent.trim()){say("Saisissez ou collez un texte.");return}
  var parts=chunks(sanitize(src.innerHTML)),L=tgt.value,res=[];go.disabled=true;
  try{for(var i=0;i<parts.length;i++){say(parts.length>1?"Traduction "+(i+1)+"/"+parts.length+"…":"Traduction en cours…");
-   var p=`Traduis en ${L} le texte HTML ci-dessous.\nRègles : conserve exactement la même structure et les mêmes balises (p, br, b, i, u, ul, ol, li, h1, h2, h3, a) avec la même imbrication ; ne traduis que le texte visible ; garde tels quels les noms propres, chiffres, adresses e-mail, URL et valeurs href ; n’ajoute ni balise, ni commentaire, ni explication.\nRéponds uniquement par un objet JSON {"html":"..."} dont la valeur est le HTML traduit.\n\nHTML :\n${parts[i]}`;
-   var r=await S.json(p);res.push(typeof r.html==="string"?r.html:"")}
+   var r=await apiAI({mode:"translate",language:L,html:parts[i]});res.push(typeof r.html==="string"?r.html:"")}
   out.dir=L==="Arabe"?"rtl":"ltr";out.innerHTML=sanitize(res.join(""));say("Traduit en "+L.toLowerCase()+". Relisez avant d’utiliser.")
- }catch(e){say(e&&e.code==="rate_limited"?"Trop de demandes. Réessayez dans un instant.":"La traduction n’a pas abouti. Réessayez.")}
+ }catch(e){say(e&&e.status===429?"Limite du moteur IA atteinte. Réessayez plus tard.":e&&e.status===503?"Le service IA n’est pas encore configuré.":"La traduction n’a pas abouti. Réessayez.")}
  go.disabled=false};
+
 document.getElementById("cp").onclick=async function(){var h=out.innerHTML,t=out.innerText||out.textContent;if(!t.trim()){msg2.textContent="Rien à copier.";return}
  try{await navigator.clipboard.write([new ClipboardItem({"text/html":new Blob([h],{type:"text/html"}),"text/plain":new Blob([t],{type:"text/plain"})})])}
  catch(e){var r=document.createRange();r.selectNodeContents(out);var s=getSelection();s.removeAllRanges();s.addRange(r);document.execCommand("copy");s.removeAllRanges()}
  msg2.textContent="Copié, mise en forme comprise."};
 document.getElementById("pr").onclick=function(){window.print()};
 document.getElementById("re").onclick=function(){if(!out.textContent.trim())return;src.innerHTML=out.innerHTML;out.innerHTML="";say("Traduction reprise comme texte source. Choisissez la nouvelle langue.")};
-(async function(){var sv=document.getElementById("sv"),dl=null;try{if(window.claude&&claude.use)dl=await claude.use("downloads")}catch(e){}
- sv.hidden=false;sv.onclick=function(){if(!out.textContent.trim()){msg2.textContent="Rien à enregistrer.";return}
- var data='<!DOCTYPE html><html><head><meta charset="utf-8"><title>Traduction</title></head><body>'+out.innerHTML+'</body></html>';
- if(dl){dl.save({filename:"traduction.html",data:data}).then(function(){msg2.textContent="Fichier enregistré. Word peut l’ouvrir."}).catch(function(e){if(!e||e.code!=="declined")msg2.textContent="Téléchargement impossible."})}
- else{var a=document.createElement("a"),u=URL.createObjectURL(new Blob([data],{type:"text/html;charset=utf-8"}));a.href=u;a.download="traduction.html";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(u);msg2.textContent="Fichier téléchargé."}};
- if(!(await getS()))say("La traduction par IA n’est pas disponible dans cette vue.")})();
+(function(){var sv=document.getElementById("sv");sv.hidden=false;sv.onclick=function(){if(!out.textContent.trim()){msg2.textContent="Rien à enregistrer.";return}var data='<!DOCTYPE html><html><head><meta charset="utf-8"><title>Traduction</title></head><body>'+out.innerHTML+'</body></html>';var a=document.createElement("a"),u=URL.createObjectURL(new Blob([data],{type:"text/html;charset=utf-8"}));a.href=u;a.download="traduction.html";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(u);msg2.textContent="Fichier téléchargé."}})();
+say("Le traducteur est prêt. Le moteur IA nécessite la publication sécurisée du service.");
 </script>
 </body>
 </html>
