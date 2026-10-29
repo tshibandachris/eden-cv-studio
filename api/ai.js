@@ -1,6 +1,7 @@
 const MAX_TEXT = 30000;
 const MAX_IMAGES = 5;
 const ALLOWED_ORIGINS = new Set([
+  "https://eden-cv-studio-ai.vercel.app",
   "https://tshibandachris.github.io",
   "http://localhost:3000",
   "http://127.0.0.1:3000",
